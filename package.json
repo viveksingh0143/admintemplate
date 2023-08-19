@@ -5,12 +5,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "auth": "yarn workspace auth start",
+    "build:auth": "yarn workspace auth build",
+    "admin": "yarn workspace admin start",
+    "build:admin": "yarn workspace admin build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "workspaces": [
-    "packages/*"
+    "apps/*"
   ]
 }
