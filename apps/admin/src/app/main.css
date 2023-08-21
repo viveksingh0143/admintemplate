@@ -5,44 +5,44 @@
 
 @layer base {
   :root {
-    --color-primary: rgb(255 115 179);
-    --color-secondary: rgb(111 114 185);
+    --color-primary: #ff73b3;
+    --color-secondary: #6f72b9;
   }
   .classic-corporate {
-    --color-primary: rgb(3, 4, 94);
-    --color-secondary: rgb(2, 62, 138);
-    --color-success: rgb(42, 157, 143);
-    --color-warning: rgb(244, 162, 97);
-    --color-info: rgb(33, 158, 188);
-    --color-danger: rgb(231, 111, 81);
-    --color-divider: rgb(189, 189, 189);
+    --color-primary: #03045e;
+    --color-secondary: #023e8a;
+    --color-success: #2a9d8f;
+    --color-warning: #f4a261;
+    --color-info: #219ebc;
+    --color-danger: #e76f51;
+    --color-divider: #bdbdbd;
   }
   .tropical-sunset {
-    --color-primary: rgb(38, 70, 83);
-    --color-secondary: rgb(233, 196, 106);
-    --color-success: rgb(42, 157, 143);
-    --color-warning: rgb(244, 162, 97);
-    --color-info: rgb(33, 158, 188);
-    --color-danger: rgb(231, 111, 81);
-    --color-divider: rgb(189, 189, 189);
+    --color-primary: #264653;
+    --color-secondary: #e9c46a;
+    --color-success: #2a9d8f;
+    --color-warning: #f4a261;
+    --color-info: #219ebc;
+    --color-danger: #e76f51;
+    --color-divider: #bdbdbd;
   }
   .gentle-breeze {
-    --color-primary: rgb(205, 180, 219);
-    --color-secondary: rgb(189, 224, 254);
-    --color-success: rgb(42, 157, 143);
-    --color-warning: rgb(244, 162, 97);
-    --color-info: rgb(33, 158, 188);
-    --color-danger: rgb(231, 111, 81);
-    --color-divider: rgb(189, 189, 189);
+    --color-primary: #cdb4db;
+    --color-secondary: #bde0fe;
+    --color-success: #2a9d8f;
+    --color-warning: #f4a261;
+    --color-info: #219ebc;
+    --color-danger: #e76f51;
+    --color-divider: #bdbdbd;
   }
   .forest-green {
-    --color-primary: rgb(96, 108, 56);
-    --color-secondary: rgb(188, 108, 37);
-    --color-success: rgb(42, 157, 143);
-    --color-warning: rgb(244, 162, 97);
-    --color-info: rgb(33, 158, 188);
-    --color-danger: rgb(231, 111, 81);
-    --color-divider: rgb(189, 189, 189);
+    --color-primary: #606c38;
+    --color-secondary: #bc6c25;
+    --color-success: #2a9d8f;
+    --color-warning: #f4a261;
+    --color-info: #219ebc;
+    --color-danger: #e76f51;
+    --color-divider: #bdbdbd;
   }
 }
 /* Gentle Breeze
