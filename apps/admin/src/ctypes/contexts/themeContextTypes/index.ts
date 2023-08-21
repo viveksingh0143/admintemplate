@@ -1,14 +1,16 @@
-export type ColorTheme = 'dark' | 'light';
+export type ColorTheme = "Classic Corporate" | "Tropical Sunset" | "Gentle Breeze" | "Forest Green";
 export type LayoutTheme = 'stacked' | 'sidebar';
 
-export interface Theme {
-    colorTheme: ColorTheme,
-    layoutTheme: LayoutTheme
+export type Theme = {
+    colorTheme: ColorTheme;
+    hasColorBg: Boolean;
 };
 
 export type ThemeContextProps = {
-    theme: Theme,
-    setTheme: React.Dispatch<React.SetStateAction<Theme>>
+    theme: Theme;
+    setTheme: React.Dispatch<React.SetStateAction<Theme>>;
+    layout: LayoutTheme;
+    setLayout: React.Dispatch<React.SetStateAction<LayoutTheme>>;
 };
 
 export interface ThemeContextProviderProps {

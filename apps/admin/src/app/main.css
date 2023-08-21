@@ -1,4 +1,51 @@
-/* plain css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer base {
+  :root {
+    --color-primary: rgb(255 115 179);
+    --color-secondary: rgb(111 114 185);
+  }
+  .classic-corporate {
+    --color-primary: rgb(3, 4, 94);
+    --color-secondary: rgb(2, 62, 138);
+    --color-success: rgb(42, 157, 143);
+    --color-warning: rgb(244, 162, 97);
+    --color-info: rgb(33, 158, 188);
+    --color-danger: rgb(231, 111, 81);
+    --color-divider: rgb(189, 189, 189);
+  }
+  .tropical-sunset {
+    --color-primary: rgb(38, 70, 83);
+    --color-secondary: rgb(233, 196, 106);
+    --color-success: rgb(42, 157, 143);
+    --color-warning: rgb(244, 162, 97);
+    --color-info: rgb(33, 158, 188);
+    --color-danger: rgb(231, 111, 81);
+    --color-divider: rgb(189, 189, 189);
+  }
+  .gentle-breeze {
+    --color-primary: rgb(205, 180, 219);
+    --color-secondary: rgb(189, 224, 254);
+    --color-success: rgb(42, 157, 143);
+    --color-warning: rgb(244, 162, 97);
+    --color-info: rgb(33, 158, 188);
+    --color-danger: rgb(231, 111, 81);
+    --color-divider: rgb(189, 189, 189);
+  }
+  .forest-green {
+    --color-primary: rgb(96, 108, 56);
+    --color-secondary: rgb(188, 108, 37);
+    --color-success: rgb(42, 157, 143);
+    --color-warning: rgb(244, 162, 97);
+    --color-info: rgb(33, 158, 188);
+    --color-danger: rgb(231, 111, 81);
+    --color-divider: rgb(189, 189, 189);
+  }
+}
+/* Gentle Breeze
+Tropical Sunset
+Forest Green
+Ocean Blue */

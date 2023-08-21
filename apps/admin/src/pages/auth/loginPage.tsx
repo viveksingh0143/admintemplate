@@ -1,4 +1,5 @@
 import EasyForm, { useEasyForm, Checkbox, Input } from '@components/form';
+import Button from '@components/ui/button';
 import { delay } from '@lib/utils';
 import { z }  from 'zod';
 
@@ -13,7 +14,7 @@ const LoginPage: React.FunctionComponent = () => {
   const { formState: { isLoading, isSubmitting } } = methods;
 
   const handleSubmit = async (data: z.infer<typeof loginSchema>) => {
-    await delay(3000);
+    await delay(10000);
   };
 
   return (
@@ -42,9 +43,7 @@ const LoginPage: React.FunctionComponent = () => {
               </div>
 
               <div>
-                <button disabled={ isLoading || isSubmitting } type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                  Sign in
-                </button>
+                <Button type="submit" loading={isLoading || isSubmitting} loadingText="Authenticating..." variant="primary" label="Sign in" className="flex w-full justify-center" />
               </div>
             </EasyForm>
           </div>
