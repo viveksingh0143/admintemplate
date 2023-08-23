@@ -8,14 +8,16 @@ const getConfig = (rootPath: string) => {
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss', '.css'],
       alias: {
         '@app': path.resolve(rootPath, './src/app'),
+        '@configs': path.resolve(rootPath, './src/configs'),
         '@assets': path.resolve(rootPath, './src/assets'),
         '@components': path.resolve(rootPath, './src/components'),
-        '@contexts': path.resolve(rootPath, './src/contexts'),
+        '@hooks': path.resolve(rootPath, './src/hooks'),
         '@ctypes': path.resolve(rootPath, './src/ctypes'),
         '@database': path.resolve(rootPath, './src/database'),
         '@layouts': path.resolve(rootPath, './src/layouts'),
         '@lib': path.resolve(rootPath, './src/lib'),
         '@pages': path.resolve(rootPath, './src/pages'),
+        '@services': path.resolve(rootPath, './src/services'),
       },
     },
     module: {

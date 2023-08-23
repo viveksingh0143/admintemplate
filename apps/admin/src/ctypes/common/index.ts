@@ -1,0 +1,1 @@
+export type CommonVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger' | 'none';

@@ -17,14 +17,16 @@
     "baseUrl": "./src" /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "@app/": ["./app/"],
+      "@configs/": ["./configs/"],
       "@assets/": ["./assets/"],
       "@components/": ["./components/"],
-      "@contexts/": ["./contexts/"],
+      "@hooks/": ["./hooks/"],
       "@ctypes/": ["./ctypes/"],
       "@database/": ["./database/"],
       "@layouts/": ["./layouts/"],
       "@lib": ["./lib"],
       "@pages/": ["./pages/"],
+      "@services/": ["./services/"],
       "@*": ["./*"],
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     "types": [

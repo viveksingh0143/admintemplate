@@ -1,4 +1,4 @@
-import { useThemeContext } from "@contexts/themeContext";
+import { useThemeContext } from "@hooks/themeContext";
 import { MouseEvent } from "react";
 
 const people = [

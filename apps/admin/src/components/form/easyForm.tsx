@@ -17,9 +17,6 @@ const Form = <T extends zod.ZodSchema<any>>({ methods, onSubmit, children, class
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className={classNames('space-y-4', className)}>
-        {/* <div>
-          isLoading: {isLoading}, isSubmitting: {isSubmitting}, isSubmitted: {isSubmitted}, isSubmitSuccessful: {isSubmitSuccessful}, submitCount: {submitCount}
-        </div> */}
         {children}
       </form>
     </FormProvider>

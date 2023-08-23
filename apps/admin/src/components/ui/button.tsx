@@ -1,11 +1,10 @@
 import React, { ComponentProps } from 'react';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { classNames } from '@lib/utils';
-
-type ButtonVariant = 'primary' | 'secondary' | 'warning' | 'success';
+import { CommonVariant } from '@ctypes/common';
 
 type ButtonCommonProps = Omit<ComponentProps<'button'>, "children"> & {
-  variant: ButtonVariant;
+  variant: CommonVariant;
   onClick?: () => void;
   loading?: boolean;
   loadingText?: string;
@@ -17,25 +16,20 @@ type ButtonChildrenProps = {
 
 type ButtonInlineProps = {
   icon?: React.ReactNode;
-  label: string;
+  label?: string;
 } & ButtonCommonProps;
 
 type ButtonProps = ButtonChildrenProps | ButtonInlineProps;
 
 const Button: React.FC<ButtonProps> = (props) => {
-  const variantClasses = {
-    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600',
-    secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus-visible:outline-secondary-600',
-    warning: 'bg-warning-600 text-white hover:bg-warning-700 focus-visible:outline-warning-600',
-    success: 'bg-success-600 text-white hover:bg-success-700 focus-visible:outline-success-600',
-  }[props.variant];
-
+  const variantClasses = props.variant === "none" ? "" : `bg-${props.variant}-600 text-white hover:bg-${props.variant}-700 focus-visible:outline-${props.variant}-600`;
+  
   const renderChildren = () => {
-    if ('label' in props && props.label) {
+    if ('label' in props && props.label || 'icon' in props && props.icon) {
       return (
         <>
           {props.icon && props.icon}
-          {props.label}
+          {props.label && props.label}
         </>
       );
     } else if ('children' in props) {

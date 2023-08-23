@@ -4,6 +4,7 @@ import type { Configuration, WebpackPluginInstance } from "webpack";
 
 import HTMLWebpackPlugin from 'html-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import DotenvWebpackPlugin from 'dotenv-webpack';
 
 
 const getConfig = (rootPath: string) => {
@@ -17,7 +18,8 @@ const getConfig = (rootPath: string) => {
     new HTMLWebpackPlugin({
       template: './public/index.html', // you have to have the template file
     }),
-    new ReactRefreshWebpackPlugin()
+    new ReactRefreshWebpackPlugin(),
+    new DotenvWebpackPlugin({path: path.resolve(rootPath, '.env')})
   ];
   
   const config: Configuration = {

@@ -33,7 +33,7 @@ const InputOption: React.FC<InputOptionProps> = ({
         type={type}
         {...register(name, { required })}
         {...props}
-        className={classNames("h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500", inputClassName)}
+        className={classNames("h-4 w-4 text-primary-600 border-primary-300 rounded focus:ring-primary-500", inputClassName)}
       />
       {label && (
         <label htmlFor={fieldId} className={classNames("ml-3 text-sm font-medium text-gray-900", labelClassName)}>

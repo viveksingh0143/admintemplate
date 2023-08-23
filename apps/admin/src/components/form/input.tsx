@@ -27,11 +27,11 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className={classNames('mb-4', className)}>
       <label className={classNames('block text-sm font-medium text-gray-700', labelClassName)}>{label}</label>
-      <input {...register(name, { required })} className={classNames('placeholder:text-slate-400 mt-1 p-2 w-full border rounded-md', inputClassName)} {...props} />
+      <input {...register(name, { required })} className={classNames('placeholder:text-slate-400 focus:ring-primary-500 focus:border-primary-500 mt-1 p-2 w-full border rounded-md', inputClassName)} {...props} />
       <ErrorMessage
         errors={errors}
         name={name}
-        render={({ message }) => <span className={classNames('text-red-500 text-xs', errorClassName)}>{message}</span>}
+        render={({ message }) => <span className={classNames('text-danger-500 text-xs', errorClassName)}>{message}</span>}
       />
     </div>
   );
