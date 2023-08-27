@@ -26,6 +26,7 @@ interface DropdownProps {
   buttonClassName?: string;
   optionsGroupClassName?: string;
   optionClassName?: string;
+  value?: DropdownOption | null;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -44,29 +45,48 @@ const Dropdown: React.FC<DropdownProps> = ({
   buttonClassName,
   optionsGroupClassName,
   optionClassName,
+  value = null,
 }) => {
-  const [selectedItem, setSelectedItem] = useState<DropdownOption | null>(null);
-
-  const variantClasses = variant === "none" ? "" : `rounded-lg shadow-sm ring-1 ring-inset bg-${variant}-600 text-white hover:bg-${variant}-700 ring-${variant}-800 focus-visible:outline-${variant}-600`;
+  const [selectedItem, setSelectedItem] = useState<DropdownOption | null>(value);
+  const variantClasses = {
+    primary: "rounded-lg shadow-sm ring-1 ring-inset bg-primary-600 text-white hover:bg-primary-700 ring-primary-800 focus-visible:outline-primary-600",
+    secondary: "rounded-lg shadow-sm ring-1 ring-inset bg-secondary-600 text-white hover:bg-secondary-700 ring-secondary-800 focus-visible:outline-secondary-600",
+    success: "rounded-lg shadow-sm ring-1 ring-inset bg-success-600 text-white hover:bg-success-700 ring-success-800 focus-visible:outline-success-600",
+    warning: "rounded-lg shadow-sm ring-1 ring-inset bg-warning-600 text-white hover:bg-warning-700 ring-warning-800 focus-visible:outline-warning-600",
+    info: "rounded-lg shadow-sm ring-1 ring-inset bg-info-600 text-white hover:bg-info-700 ring-info-800 focus-visible:outline-info-600",
+    danger: "rounded-lg shadow-sm ring-1 ring-inset bg-danger-600 text-white hover:bg-danger-700 ring-danger-800 focus-visible:outline-danger-600",
+    none: "",
+  }[variant];
   
   const handleClick = (option: DropdownOption) => {
     setSelectedItem(option);
     if (typeof option === 'string') {
       onChange?.(option);
+    } else if (option.onClick !== undefined) {
+      option.onClick();
     } else {
       onChange?.(valueKey ? option[valueKey] : option);
     }
   };
 
-  const renderButtonContent = () => {
+  const renderButtonLabel = () => {
     if (showSelectedItem && selectedItem) {
       return typeof selectedItem === 'string' ? selectedItem : selectedItem[labelKey];
+    } else {
+      return (
+        <>
+          {buttonIcon && buttonIcon}
+          {buttonLabel && buttonLabel}
+        </>
+      )
     }
+  }
+  
+  const renderButtonContent = () => {
     return (
       <div className="flex flex-row flex-1">
         <div className="flex flex-row flex-1">
-          {buttonIcon && buttonIcon}
-          {buttonLabel && buttonLabel}
+          { renderButtonLabel() }
         </div>
         { chevron && (
           <div className="flex-none ml-1">

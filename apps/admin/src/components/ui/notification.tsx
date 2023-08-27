@@ -23,16 +23,25 @@ export const Notification = forwardRef<NotificationHandles, NotificationProps>((
   const [variant, setVariant] = useState(type);
   const [show, setShow] = useState(false);
 
-  let defaultIcon: React.ReactNode = null;
-  if (variant === "success") {
-    defaultIcon = <CheckCircleIcon className="pl-2 text-white h-5" />;
-  } else if (variant === "warning") {
-    defaultIcon = <ExclamationCircleIcon className="pl-2 text-white h-5" />;
-  } else if (variant === "info") {
-    defaultIcon = <InformationCircleIcon className="pl-2 text-white h-5" />;
-  } else if (variant === "danger") {
-    defaultIcon = <FireIcon className="pl-2 text-white h-5" />;
-  }
+  const variantClasses = {
+    primary: "bg-primary",
+    secondary: "bg-secondary",
+    success: "bg-success",
+    warning: "bg-warning",
+    info: "bg-info",
+    danger: "bg-danger",
+    none: "",
+  }[variant];
+
+  let defaultIcon: React.ReactNode = {
+    primary: null,
+    secondary: null,
+    success: <CheckCircleIcon className="pl-2 text-white h-5" />,
+    warning: <ExclamationCircleIcon className="pl-2 text-white h-5" />,
+    info: <InformationCircleIcon className="pl-2 text-white h-5" />,
+    danger: <FireIcon className="pl-2 text-white h-5" />,
+    none: null,
+  }[variant];
 
   const onCloseHandler = () => {
     if (onClose) {
@@ -70,7 +79,7 @@ export const Notification = forwardRef<NotificationHandles, NotificationProps>((
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <div className={classNames(`text-xs text-white bg-${variant} rounded shadow-lg z-1000`, fixed ? "fixed top-0 right-0 m-6" : "my-1", className)}>
+      <div className={classNames(`text-xs text-white rounded shadow-lg z-1000`, fixed ? "fixed top-0 right-0 m-6" : "my-1", variantClasses, className)}>
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             {icon ? icon : defaultIcon}

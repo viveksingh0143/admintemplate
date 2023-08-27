@@ -26,7 +26,7 @@ const Textarea: React.FC<TextareaProps> = ({
 
   return (
     <div className={classNames('mb-4', className)}>
-      <label className={classNames('block text-sm font-medium text-gray-700', labelClassName)}>{label}</label>
+      <label className={classNames('block text-sm font-medium text-gray-500', labelClassName)}>{label}</label>
       <textarea {...register(name, { required })} className={classNames('mt-1 p-2 w-full border rounded-md', textareaClassName)} {...props}></textarea>
       <ErrorMessage
         errors={errors}

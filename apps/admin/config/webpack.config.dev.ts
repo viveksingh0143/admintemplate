@@ -25,6 +25,7 @@ const getConfig = (rootPath: string) => {
   const config: Configuration = {
     mode: 'development',
     devServer,
+    devtool: 'source-map',
     // entry: './src/index.ts', // codes will be inside src folder
     output: {
       path: path.resolve(rootPath, 'build'),

@@ -6,6 +6,7 @@ type InputProps = {
   name: string;
   label: string;
   required?: boolean;
+  hideLabel?: boolean;
   className?: string;
   labelClassName?: string;
   inputClassName?: string;
@@ -16,6 +17,7 @@ const Input: React.FC<InputProps> = ({
   name,
   label,
   required,
+  hideLabel = false,
   className = '',
   labelClassName = '',
   inputClassName = '',
@@ -26,8 +28,8 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div className={classNames('mb-4', className)}>
-      <label className={classNames('block text-sm font-medium text-gray-700', labelClassName)}>{label}</label>
-      <input {...register(name, { required })} className={classNames('placeholder:text-slate-400 focus:ring-primary-500 focus:border-primary-500 mt-1 p-2 w-full border rounded-md', inputClassName)} {...props} />
+      { !hideLabel && (<label className={classNames('block text-sm font-medium text-gray-500', labelClassName)}>{label}</label>) }
+      <input {...register(name)} className={classNames('placeholder:text-slate-400 focus:ring-primary-500 focus:border-primary-500 mt-1 p-2 w-full border rounded-md', inputClassName)} {...props} />
       <ErrorMessage
         errors={errors}
         name={name}

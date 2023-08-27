@@ -5,7 +5,7 @@ import { CommonVariant } from '@ctypes/common';
 
 type ButtonCommonProps = Omit<ComponentProps<'button'>, "children"> & {
   variant: CommonVariant;
-  onClick?: () => void;
+  onClick?: any;
   loading?: boolean;
   loadingText?: string;
 };
@@ -19,10 +19,18 @@ type ButtonInlineProps = {
   label?: string;
 } & ButtonCommonProps;
 
-type ButtonProps = ButtonChildrenProps | ButtonInlineProps;
+export type ButtonProps = ButtonChildrenProps | ButtonInlineProps;
 
 const Button: React.FC<ButtonProps> = (props) => {
-  const variantClasses = props.variant === "none" ? "" : `bg-${props.variant}-600 text-white hover:bg-${props.variant}-700 focus-visible:outline-${props.variant}-600`;
+  const variantClasses = {
+    primary: "bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600",
+    secondary: "bg-secondary-600 text-white hover:bg-secondary-700 focus-visible:outline-secondary-600",
+    success: "bg-success-600 text-white hover:bg-success-700 focus-visible:outline-success-600",
+    warning: "bg-warning-600 text-white hover:bg-warning-700 focus-visible:outline-warning-600",
+    info: "bg-info-600 text-white hover:bg-info-700 focus-visible:outline-info-600",
+    danger: "bg-danger-600 text-white hover:bg-danger-700 focus-visible:outline-danger-600",
+    none: "",
+  }[props.variant];
   
   const renderChildren = () => {
     if ('label' in props && props.label || 'icon' in props && props.icon) {

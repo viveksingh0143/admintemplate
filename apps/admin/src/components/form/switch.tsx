@@ -27,7 +27,7 @@ const Switch: React.FC<SwitchProps> = ({
   return (
     <div className={classNames('mb-4 flex items-center', className)}>
       <input type="checkbox" {...register(name, { required })} className={classNames('mr-2', inputClassName)} {...props} />
-      <label className={classNames('block text-sm font-medium text-gray-700', labelClassName)}>{label}</label>
+      <label className={classNames('block text-sm font-medium text-gray-500', labelClassName)}>{label}</label>
       <ErrorMessage
         errors={errors}
         name={name}

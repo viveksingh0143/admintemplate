@@ -3,6 +3,8 @@ module.exports = {
   singleQuote: true,
   jsxSingleQuote: true,
   tabWidth: 2,
+  tailwindFunctions: ['classNames'],
+  plugins: ['prettier-plugin-tailwindcss'],
   overrides: [
     {
       files: '*.mdx',

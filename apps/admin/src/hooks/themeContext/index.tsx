@@ -1,6 +1,6 @@
 import { EncryptionConstant } from '@configs/constants/encryption';
 import { ColorThemes } from '@configs/constants/themeConstant';
-import { Theme, LayoutTheme, ThemeContextProps, ThemeContextProviderProps } from '@ctypes/contexts/themeContextTypes';
+import { Theme, LayoutTheme, ThemeContextProps, ThemeContextProviderProps, SessionUser } from '@ctypes/contexts/themeContextTypes';
 import { useEncryptedState } from '@hooks/useEncryptedState';
 import { createContext, useContext, useEffect, useState } from 'react'
 
@@ -9,6 +9,7 @@ const ThemeContext = createContext<ThemeContextProps | null>(null);
 export default function ThemeContextProvider({ children }: ThemeContextProviderProps) {
     const [theme, setTheme] = useEncryptedState<Theme>("pref-theme", { colorTheme: "Default", hasColorBg: false }, EncryptionConstant.secret);
     const [layout, setLayout] = useEncryptedState<LayoutTheme>("pref-layout", "sidebar", EncryptionConstant.secret);
+    const [sessionUser, setSessionUser] = useEncryptedState<SessionUser>("minfo", { name: "", staff_id: "" }, EncryptionConstant.secret);
     
     useEffect(() => {
         const allThemeKeys = Object.values(ColorThemes).map(theme => theme.key).filter(key => key !== "");
@@ -21,7 +22,7 @@ export default function ThemeContextProvider({ children }: ThemeContextProviderP
       }, [theme]);
 
     return (
-        <ThemeContext.Provider value={{ theme, setTheme, layout, setLayout }}>
+        <ThemeContext.Provider value={{ theme, setTheme, layout, setLayout, sessionUser, setSessionUser }}>
             {children}
         </ThemeContext.Provider>
     )

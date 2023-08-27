@@ -14,6 +14,7 @@ type SelectProps<T extends { [K in LabelKey | ValueKey]: string }, LabelKey exte
   labelClassName?: string;
   selectClassName?: string;
   errorClassName?: string;
+  hideLabel?: boolean;
 } & React.ComponentProps<'select'>;
 
 const Select = <T extends { [K in LabelKey | ValueKey]: string }, LabelKey extends keyof T = keyof T, ValueKey extends keyof T = keyof T>({
@@ -27,18 +28,21 @@ const Select = <T extends { [K in LabelKey | ValueKey]: string }, LabelKey exten
   labelClassName = '',
   selectClassName = '',
   errorClassName = '',
+  hideLabel = false,
   ...props
 }: SelectProps<T, LabelKey, ValueKey>) => {
   const { register, formState: { errors } } = useFormContext();
 
   return (
     <div className={classNames('mb-4', className)}>
-      <label htmlFor={name} className={classNames('block text-sm font-medium text-gray-700', labelClassName)}>
-        {label}
-      </label>
+      { !hideLabel && (
+        <label htmlFor={name} className={classNames('block text-sm font-medium text-gray-500', labelClassName)}>
+          {label}
+        </label>
+      )}
       <select
         id={name}
-        {...register(name, { required })}
+        {...register(name)}
         className={classNames('mt-1 p-2 w-full border rounded-md', selectClassName)}
         {...props}
       >

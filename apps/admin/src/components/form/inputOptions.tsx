@@ -39,7 +39,7 @@ const InputOptions = <T extends Option>({
 
   return (
     <div className={classNames("space-y-4", className)}>
-      {mainLabel && <label className={classNames("text-base font-semibold text-gray-900", labelClassName)}>{mainLabel}</label>}
+      {mainLabel && <label className={classNames("text-base font-semibold text-gray-500", labelClassName)}>{mainLabel}</label>}
       {helpText && <p className="text-sm text-gray-500">{helpText}</p>}
       <fieldset className={`mt-4 ${orientationClass}`}>
         {legend && <legend className="sr-only">{legend}</legend>}

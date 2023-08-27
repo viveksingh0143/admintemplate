@@ -3,6 +3,7 @@ import Button from '@components/ui/button';
 import LoadingOverlay from '@components/ui/loadingOverlay';
 import { Notification, NotificationHandles } from '@components/ui/notification';
 import { useLogin } from '@hooks/auth/useLogin';
+import { useThemeContext } from '@hooks/themeContext';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z }  from 'zod';
@@ -14,12 +15,17 @@ const loginSchema = z.object({
 });
 
 const LoginPage: React.FunctionComponent = () => {
+  const {sessionUser, setSessionUser} = useThemeContext();
   const navigate = useNavigate();
   const methods = useEasyForm(loginSchema);
   const { setError, formState: { isLoading, isSubmitting } } = methods;
   const notificationRef = useRef<NotificationHandles>(null);
   const mutation = useLogin(
-    () => navigate('/'),
+    (data: {name: string, staff_id: string}) => {
+      console.log()
+      setSessionUser(data);
+      navigate('/');
+    },
     (errors) => {
       const { rootError, email, password, rememberMe } = errors;
       setError("email", email?.message);

@@ -72,6 +72,33 @@ class AxiosService {
       AxiosService.instance.axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${tokens.access_token}`;
     }
   }
+
+  public getUrlWithParams(url: string, params: any) {
+    let queryString = this.getQueryString(params);
+    if (queryString === "") {
+      return url;
+    } else {
+      return url + "?" + queryString;
+    }
+  }
+
+  public getQueryString(params: any): string {
+    if (typeof params == "string") {
+      return params;
+    } else if (Array.isArray(params)) {
+      return params.filter(param => param)
+        .map(param => this.getQueryString(param))
+        .join('&');
+    } else if (typeof params == "object") {
+      return Object.keys(params)
+        .filter(key => params[key])
+        .map(key => {
+          return `${key}=${encodeURIComponent(params[key])}`;
+        })
+        .join('&');
+    }
+    return "";
+  }
 }
 
 export default AxiosService;

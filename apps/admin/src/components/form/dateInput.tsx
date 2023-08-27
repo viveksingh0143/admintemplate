@@ -38,7 +38,7 @@ const DateInput: React.FC<DateInputProps> = ({
 
   return (
     <div className={classNames('mb-4', className)}>
-      <label className={classNames('block text-sm font-medium text-gray-700', labelClassName)}>{label}</label>
+      <label className={classNames('block text-sm font-medium text-gray-500', labelClassName)}>{label}</label>
       <DatePicker
         selected={value}
         onChange={handleChange} // Use the custom handleChange function

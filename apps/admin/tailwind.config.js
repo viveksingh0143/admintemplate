@@ -18,7 +18,8 @@ module.exports = {
         '1000': '1000',
       },
       colors: {
-        primary: {
+        'divider': 'rgb(var(--color-divider) / <alpha-value>)',
+        'primary': {
           DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
           50: 'rgb(var(--color-primary-50) / <alpha-value>)',
           100: 'rgb(var(--color-primary-100) / <alpha-value>)',
@@ -32,7 +33,7 @@ module.exports = {
           900: 'rgb(var(--color-primary-900) / <alpha-value>)',
           950: 'rgb(var(--color-primary-950) / <alpha-value>)',
         },
-        secondary: {
+        'secondary': {
           DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
           50: 'rgb(var(--color-secondary-50) / <alpha-value>)',
           100: 'rgb(var(--color-secondary-100) / <alpha-value>)',
@@ -46,7 +47,7 @@ module.exports = {
           900: 'rgb(var(--color-secondary-900) / <alpha-value>)',
           950: 'rgb(var(--color-secondary-950) / <alpha-value>)',
         },
-        success: {
+        'success': {
           DEFAULT: 'rgb(var(--color-success) / <alpha-value>)',
           50: 'rgb(var(--color-success-50) / <alpha-value>)',
           100: 'rgb(var(--color-success-100) / <alpha-value>)',
@@ -60,7 +61,7 @@ module.exports = {
           900: 'rgb(var(--color-success-900) / <alpha-value>)',
           950: 'rgb(var(--color-success-950) / <alpha-value>)',
         },
-        warning: {
+        'warning': {
           DEFAULT: 'rgb(var(--color-warning) / <alpha-value>)',
           50: 'rgb(var(--color-warning-50) / <alpha-value>)',
           100: 'rgb(var(--color-warning-100) / <alpha-value>)',
@@ -74,7 +75,7 @@ module.exports = {
           900: 'rgb(var(--color-warning-900) / <alpha-value>)',
           950: 'rgb(var(--color-warning-950) / <alpha-value>)',
         },
-        info: {
+        'info': {
           DEFAULT: 'rgb(var(--color-info) / <alpha-value>)',
           50: 'rgb(var(--color-info-50) / <alpha-value>)',
           100: 'rgb(var(--color-info-100) / <alpha-value>)',
@@ -88,7 +89,7 @@ module.exports = {
           900: 'rgb(var(--color-info-900) / <alpha-value>)',
           950: 'rgb(var(--color-info-950) / <alpha-value>)',
         },
-        danger: {
+        'danger': {
           DEFAULT: 'rgb(var(--color-danger) / <alpha-value>)',
           50: 'rgb(var(--color-danger-50) / <alpha-value>)',
           100: 'rgb(var(--color-danger-100) / <alpha-value>)',
@@ -102,7 +103,6 @@ module.exports = {
           900: 'rgb(var(--color-danger-900) / <alpha-value>)',
           950: 'rgb(var(--color-danger-950) / <alpha-value>)',
         },
-        divider: 'rgb(var(--color-divider) / <alpha-value>)',
       },
     },
   },
