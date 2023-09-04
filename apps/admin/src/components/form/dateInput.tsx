@@ -42,6 +42,7 @@ const DateInput: React.FC<DateInputProps> = ({
       <DatePicker
         selected={value}
         onChange={handleChange} // Use the custom handleChange function
+        wrapperClassName="w-full"
         className={classNames('mt-1 p-2 w-full border rounded-md', inputClassName)}
         {...props} // Spread other props excluding onChange
       />

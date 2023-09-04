@@ -1,54 +1,37 @@
 import { Chip, IndeterminateCheckbox } from "@components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const productColumns: ColumnDef<any, any>[] = [
+export const batchColumns: ColumnDef<any, any>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <IndeterminateCheckbox
-        {...{
-          checked: table.getIsAllRowsSelected(),
-          indeterminate: table.getIsSomeRowsSelected(),
-          onChange: table.getToggleAllRowsSelectedHandler(),
-        }}
-      />
+      <IndeterminateCheckbox {...{ checked: table.getIsAllRowsSelected(), indeterminate: table.getIsSomeRowsSelected(), onChange: table.getToggleAllRowsSelectedHandler() }} />
     ),
     cell: ({ row }) => (
       <div className="px-1">
-        <IndeterminateCheckbox
-          {...{
-            checked: row.getIsSelected(),
-            disabled: !row.getCanSelect(),
-            indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler(),
-          }}
-        />
+        <IndeterminateCheckbox {...{ checked: row.getIsSelected(), disabled: !row.getCanSelect(), indeterminate: row.getIsSomeSelected(), onChange: row.getToggleSelectedHandler() }} />
       </div>
     ),
   },
   {
-    accessorKey: "code",
+    accessorKey: "batch_no",
     enableSorting: true,
-    header: "Code",
+    header: "Batch No.",
   },
   {
-    accessorKey: "name",
+    accessorKey: "batch_date",
     enableSorting: true,
-    header: "Name",
-    cell: (props) => {
-      return (
-        <>
-          <div>{props.getValue()}</div>
-          <div>{props?.row?.original?.description}</div>
-        </>
-      );
-    },
+    header: "Batch Date",
   },
   {
-    accessorKey: "unit",
-    enableSorting: false,
-    header: "Unit",
-    cell: (props) => props?.getValue()?.toUpperCase(),
+    accessorKey: "customer_name",
+    enableSorting: true,
+    header: "Customer",
+  },
+  {
+    accessorKey: "target_quantity",
+    enableSorting: true,
+    header: "Target Quantity",
   },
   {
     accessorKey: "status",

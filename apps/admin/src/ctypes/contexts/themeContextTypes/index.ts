@@ -12,7 +12,7 @@ export interface SessionUser {
 
 export type Theme = {
     colorTheme: ColorTheme;
-    hasColorBg: Boolean;
+    hasColorBg: boolean;
 };
 
 export type ThemeContextProps = {

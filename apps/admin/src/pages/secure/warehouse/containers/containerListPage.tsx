@@ -1,81 +1,95 @@
-import { Button, Dropdown } from "@components/ui";
 import PageHeader from "@components/ui/pageHeader";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicTable from "@components/ui/basicTable";
 import { ContainerTypes, containerColumns } from "./containersDef";
-import { classNames } from "@lib/utils";
+import TabGroup, { TabType } from "@components/ui/tabs";
+import { CommonConstant } from "@configs/constants/common";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@components/ui";
+import { EyeIcon, PencilIcon, PrinterIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { useContainerList } from "@hooks/warehouse/containers/containersHooks";
+import { ButtonProps } from "@components/ui/button";
+import { useNotification } from "@hooks/notificationContext";
+
+
+const tabs: TabType[] = Object.values(ContainerTypes).map(t => ({ name: t }));
 
 const ContainerListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
-  const [filter, setFilter] = useState({ type: Object.values(ContainerTypes)[0] });
-  const { data: pageData, isLoading, error } = useContainerList(page, pageSize, "", filter);
+  const { setShowNotification } = useNotification();
+  const [rowSelection, setRowSelection] = useState<any[]>([]);
+  const [currentTab, setCurrentTab] = useState(tabs[0]);
+  const [sortingOrder, setSortingOrder] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(CommonConstant.PAGE_INFO.PAGE_SIZE);
+  const { data: pageData, isLoading, error } = useContainerList(pageNumber, rowsPerPage, sortingOrder, { type: currentTab.name });
+  
+  const isRowsSelected = rowSelection.length;
 
-  const onPageChange = (page: number | undefined, pageSize: number | undefined) => {
-    if (pageSize) setPageSize(pageSize);
-    if (!page) setPage(1);
-    else if (page < 1) setPage(1); // Ensure that the page does not go below 1
-    else if (page > pageData.total_pages) setPage(pageData.total_pages); // Ensure that the page does not go above the total pages
-    else setPage(page);
+  const actionsColumn: ColumnDef<any> = {
+    accessorKey: "actions",
+    enableSorting: false,
+    header: "Actions",
+    cell: ({ row }) => (
+      <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/containers/${row.original.id}`)} />
+        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/containers/${row.original.id}/edit`)} />
+        {/* <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/containers/${row.original.id}`)} /> */}
+        <Button variant="info" icon={<PrinterIcon className="h-4 w-3 rounded-full" />} onClick={() => printStickers(1)} />
+      </span>
+    ),
   };
 
-  const loadContainerType = (containerType: string) => {
-    setFilter({
-      ...filter,
-      type: containerType
-    })
+  const onPageChange = (pageNumber: number, rowsPerPage: number, sortingOrder: string) => {
+    setRowsPerPage(rowsPerPage);
+    setPageNumber(pageNumber);
+    setSortingOrder(sortingOrder);
   };
+
+  const handleTabClick = (selectedTab: TabType) => {
+    setCurrentTab(selectedTab);
+  };
+
+  const printStickers = (count: number) => {
+    setShowNotification(count + ' sticker sent to printer', 'success');
+  }
+
+  const memoizedActionsOnSelection = useMemo<ButtonProps[]>(() => {
+    if (rowSelection.length > 0) {
+      return [
+        { label: "Print Sticker", variant: "secondary", className: "text-xs px-3 py-0", onClick: () => printStickers(rowSelection.length) }
+      ];
+    } else {
+      return [];
+    }
+  }, [isRowsSelected]);
 
   return (
     <>
       <PageHeader
+        label="Containers"
         breadcrumbs={[{ label: "Dashboard" }, { label: "Containers" }]}
-        actions={[{ label: "Create", variant:"secondary", onClick: () => navigate("/secure/warehouse/containers/create") }]}
+        actions={[
+          { label: "Create Container", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/warehouse/containers/create") },
+          ...memoizedActionsOnSelection
+        ]}
+        className="px-4"
       >
-        <div>
-          <div className="sm:hidden">
-            <Dropdown variant="secondary" options={Object.values(ContainerTypes)} onChange={section => loadContainerType(section)} buttonClassName="text-secondary" value={Object.values(ContainerTypes)[0]} showSelectedItem={true} />
-          </div>
-          <div className="hidden sm:block">
-            <nav className="flex space-x-4" aria-label="Tabs">
-              {
-                Object.values(ContainerTypes).map(t => (
-                  <a key={t}
-                    href="#"
-                    onClick={() => loadContainerType(t)}
-                    className={classNames(t === filter.type ? 'bg-primary-200 text-gray-900 hover:bg-primary hover:text-white' : 'text-white hover:bg-primary', 'rounded-md px-3 py-2 text-sm font-medium')}
-                  >{t}</a>
-                ))
-              }
-            </nav>
-          </div>
-        </div>
+        <TabGroup tabs={tabs} currentTab={currentTab} onTabClick={handleTabClick} label="Select a tab" />
       </PageHeader>
       <div className="p-4 shadow-xl rounded-lg">
         <BasicTable
-          data={pageData?.data}
-          columns={containerColumns}
+          data={pageData ? pageData.data : []}
+          columns={[...containerColumns, actionsColumn]}
           isFetching={isLoading}
           skeletonCount={5}
-          rowsPerPage={pageSize}
+          rowsPerPage={rowsPerPage}
           pageCount={pageData?.total_pages}
+          itemsCount={pageData?.total_items}
+          onRowSelection={setRowSelection}
           onPageChange={onPageChange}
         />
-      </div>
-
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="mt-8 flow-root">
-          <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   )

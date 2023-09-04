@@ -1,9 +1,15 @@
-import { Cell, ColumnDef, flexRender, getCoreRowModel, Row, useReactTable } from "@tanstack/react-table";
-import { debounce } from "lodash";
-import { ChangeEvent, FC, memo, useMemo, useState } from "react";
+import { Cell, ColumnDef, flexRender, getCoreRowModel, Row, SortingState, useReactTable } from "@tanstack/react-table";
+import { FC, memo, useEffect, useMemo, useState } from "react";
 import Pagination from "./pagination";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/20/solid";
+import { classNames } from "@lib/utils";
+import Button from "./button";
 
-interface TableProps {
+interface RowSelection {
+  [rowId: string]: boolean;
+}
+
+interface BasicTableProps {
   data: any[];
   columns: ColumnDef<any>[];
   isFetching?: boolean;
@@ -11,61 +17,72 @@ interface TableProps {
   skeletonHeight?: number;
   rowsPerPage: number;
   pageCount?: number;
-  onPageChange?: (page: number, pageSize: number) => void;
+  itemsCount?: number;
+  onRowSelection?: (selectedRows: any[]) => void;
+  onPageChange?: (page: number, pageSize: number, sorting: string) => void;
   onClickRow?: (cell: Cell<any, unknown>, row: Row<any>) => void;
 }
 
-const Table: FC<TableProps> = ({
-  data,
-  columns,
-  isFetching,
-  skeletonCount = 10,
-  skeletonHeight = 28,
-  rowsPerPage,
-  pageCount,
-  onClickRow,
-  onPageChange,
-}) => {
+const BasicTable: FC<BasicTableProps> = ({ data, columns, isFetching, skeletonCount = 10, skeletonHeight = 28, rowsPerPage, pageCount, itemsCount, onRowSelection, onClickRow, onPageChange }) => {
+  const [rowSelection, setRowSelection] = useState<RowSelection>({});
   const [paginationPage, setPaginationPage] = useState(1);
-
+  const [sorting, setSorting] = useState<SortingState>([]);
+  
   const memoizedData = useMemo(() => data, [data]);
   const memoizedColumns = useMemo(() => columns, [columns]);
-  const { getHeaderGroups, getRowModel, getAllColumns } = useReactTable({
-    data: memoizedData,
-    columns: memoizedColumns,
-    getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    pageCount,
-  });
-
+  
+  const tableInstance = useReactTable({ data: memoizedData, columns: memoizedColumns, state: { rowSelection, sorting }, enableRowSelection: true, onRowSelectionChange: setRowSelection, onSortingChange: setSorting, getCoreRowModel: getCoreRowModel(), manualSorting: true, manualPagination: true, pageCount });
+  
   const skeletons = Array.from({ length: skeletonCount }, (x, i) => i);
+  const columnCount = tableInstance.getAllColumns().length;
+  const noDataFound = !isFetching && (!memoizedData || memoizedData.length === 0);
 
-  const columnCount = getAllColumns().length;
+  useEffect(() => {
+    if (onRowSelection) {
+      onRowSelection(tableInstance.getSelectedRowModel().flatRows.map((r) => r.original));
+    }
+  }, [rowSelection, onRowSelection]);
 
-  const noDataFound =
-    !isFetching && (!memoizedData || memoizedData.length === 0);
+  useEffect(() => {
+    if (pageCount === undefined || paginationPage === undefined || paginationPage < 1) setPaginationPage(1);
+    else if (paginationPage > pageCount) setPaginationPage(pageCount);
+    else setPaginationPage(paginationPage);
+    const sortingOrder = sorting.map(s => `${s.id} ${s.desc ? "DESC" : "ASC"}`).join(", ");
+    onPageChange?.(paginationPage, rowsPerPage, sortingOrder);
 
-  const handlePageChange = (currentPage: number) => {
-    setPaginationPage(currentPage === 0 ? 1 : currentPage);
-    onPageChange?.((currentPage === 0 ? 1 : currentPage), rowsPerPage);
-  };
-
+  }, [paginationPage, rowsPerPage, sorting]);
+  
   return (
-    <div className="shadow-lg bg-white overflow-hidden">
+    <div className="shadow-lg bg-white rounded-xl overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-300">
           {!isFetching && (
-            <thead className="bg-primary-50">
-              {getHeaderGroups().map((headerGroup) => (
+            <thead>
+              {tableInstance.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
-                    <th key={header.id} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                    <th key={header.id}
+                      {...{
+                        className: classNames("px-3 py-6 text-left text-sm font-semibold text-gray-900", header.column.getCanSort() ? 'cursor-pointer select-none' : '' ),
+                        onClick: header.column.getCanSort() ? header.column.getToggleSortingHandler() : () => {},
+                      }}
+                    >
+                      <div className="flex">
+                        <span>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        </span>
+                        <span className="ml-2">
+                        {{
+                          asc: <ArrowDownIcon className="h-4 w-4" />,
+                          desc: <ArrowUpIcon className="h-4 w-4" />,
+                        }[header.column.getIsSorted() as string] ?? null}
+                        </span>
+                      </div>
                     </th>
                   ))}
                 </tr>
@@ -74,13 +91,13 @@ const Table: FC<TableProps> = ({
           )}
           <tbody className="divide-y divide-gray-200 bg-white">
             {!isFetching ? (
-              getRowModel().rows.map((row) => (
+              tableInstance.getRowModel().rows.map((row) => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       onClick={() => onClickRow?.(cell, row)}
                       key={cell.id}
-                      className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                      className="whitespace-nowrap px-3 py-4 text-xs text-gray-500"
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -115,11 +132,11 @@ const Table: FC<TableProps> = ({
       )}
       {pageCount !== undefined && onPageChange && (
         <div className="flex justify-center items-center">
-          <Pagination rowsPerPage={rowsPerPage} currentPage={paginationPage} totalPages={pageCount} onPageChange={handlePageChange} />
+          <Pagination rowsPerPage={rowsPerPage} currentPage={paginationPage} totalPages={pageCount} onPageChange={setPaginationPage} itemsCount={itemsCount} />
         </div>
       )}
     </div>
   );
 };
 
-export default memo(Table);
+export default memo(BasicTable);

@@ -6,21 +6,22 @@ interface ChipProps {
   label: string;
   icon?: React.ReactNode;
   variant?: CommonVariant;
+  className?: string;
 }
 
-const Chip: React.FC<ChipProps> = ({ label, icon, variant = "primary" }) => {
+const Chip: React.FC<ChipProps> = ({ label, icon, variant = "primary", className }) => {
   const variantClasses = {
-    primary: "bg-primary-200 text-white",
-    secondary: "bg-secondary-200 text-white",
-    success: "bg-success-200 text-white",
-    warning: "bg-warning-200 text-white",
-    info: "bg-info-200 text-white",
-    danger: "bg-danger-200 text-white",
-    none: "bg-gray-200 text-gray-700",
+    primary: "bg-primary text-white",
+    secondary: "bg-secondary text-white",
+    success: "bg-success text-white",
+    warning: "bg-warning text-white",
+    info: "bg-info text-white",
+    danger: "bg-danger text-white",
+    none: "bg-gray text-gray-700",
   }[variant];
 
   return (
-    <div className={classNames("inline-flex items-center px-3 py-1 rounded-full", variantClasses)}>
+    <div className={classNames("inline-flex items-center px-3 py-1 rounded-full", variantClasses, className)}>
       {icon && <span className="mr-2">{icon}</span>}
       <span>{label}</span>
     </div>

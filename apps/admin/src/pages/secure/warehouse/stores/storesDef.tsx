@@ -1,54 +1,40 @@
 import { Chip, IndeterminateCheckbox } from "@components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const productColumns: ColumnDef<any, any>[] = [
+export const storeColumns: ColumnDef<any, any>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <IndeterminateCheckbox
-        {...{
-          checked: table.getIsAllRowsSelected(),
-          indeterminate: table.getIsSomeRowsSelected(),
-          onChange: table.getToggleAllRowsSelectedHandler(),
-        }}
-      />
+      <IndeterminateCheckbox {...{ checked: table.getIsAllRowsSelected(), indeterminate: table.getIsSomeRowsSelected(), onChange: table.getToggleAllRowsSelectedHandler() }} />
     ),
     cell: ({ row }) => (
       <div className="px-1">
-        <IndeterminateCheckbox
-          {...{
-            checked: row.getIsSelected(),
-            disabled: !row.getCanSelect(),
-            indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler(),
-          }}
-        />
+        <IndeterminateCheckbox {...{ checked: row.getIsSelected(), disabled: !row.getCanSelect(), indeterminate: row.getIsSomeSelected(), onChange: row.getToggleSelectedHandler() }} />
       </div>
     ),
-  },
-  {
-    accessorKey: "code",
-    enableSorting: true,
-    header: "Code",
   },
   {
     accessorKey: "name",
     enableSorting: true,
     header: "Name",
+  },
+  {
+    accessorKey: "location",
+    enableSorting: true,
+    header: "Location",
+  },
+  {
+    accessorKey: "owner.id",
+    enableSorting: true,
+    header: "Owner",
     cell: (props) => {
       return (
         <>
-          <div>{props.getValue()}</div>
-          <div>{props?.row?.original?.description}</div>
+          <div>{props?.row?.original?.owner?.name}</div>
+          <div>{props?.row?.original?.owner?.email}</div>
         </>
       );
     },
-  },
-  {
-    accessorKey: "unit",
-    enableSorting: false,
-    header: "Unit",
-    cell: (props) => props?.getValue()?.toUpperCase(),
   },
   {
     accessorKey: "status",

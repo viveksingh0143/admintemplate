@@ -1,86 +1,71 @@
-import { Button, Dropdown } from "@components/ui";
 import PageHeader from "@components/ui/pageHeader";
-import Pagination from "@components/ui/pagination";
 import { useState } from "react";
-import items from '../../../json/products.json'
 import { useNavigate } from "react-router-dom";
 import { useProductList } from "@hooks/products/productsHooks";
 import BasicTable from "@components/ui/basicTable";
 import { productColumns } from "./productsDef";
-import { classNames } from "@lib/utils";
-import { Select } from "@components/form";
-import { size } from "lodash";
+import TabGroup, { TabType } from "@components/ui/tabs";
+import { CommonConstant } from "@configs/constants/common";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@components/ui";
+import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
+
+const tabs: TabType[] = [{ name: "RAW Material" }, { name: "Finished Goods" }];
 
 const ProductListPage: React.FC = () => {
-  const productTypes = ["RAW Material", "Finished Goods"];
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(8);
-  const [filter, setFilter] = useState({ type: productTypes[0] });
-  const { data: pageData, isLoading, error } = useProductList(page, pageSize, "", filter);
+  const [rowSelection, setRowSelection] = useState({});
+  const [currentTab, setCurrentTab] = useState(tabs[0]);
+  const [sortingOrder, setSortingOrder] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(CommonConstant.PAGE_INFO.PAGE_SIZE);
+  const { data: pageData, isLoading, error } = useProductList(pageNumber, rowsPerPage, sortingOrder, { type: currentTab.name });
 
-  const onPageChange = (page: number | undefined, pageSize: number | undefined) => {
-    if (pageSize) setPageSize(pageSize);
-    if (!page) setPage(1);
-    else if (page < 1) setPage(1); // Ensure that the page does not go below 1
-    else if (page > pageData.total_pages) setPage(pageData.total_pages); // Ensure that the page does not go above the total pages
-    else setPage(page);
+  const actionsColumn: ColumnDef<any> = {
+    accessorKey: "actions",
+    enableSorting: false,
+    header: "Actions",
+    cell: ({ row }) => (
+      <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/products/${row.original.id}`)} />
+        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/products/${row.original.id}/edit`)} />
+        {/* <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/products/${row.original.id}`)} /> */}
+      </span>
+    ),
   };
 
-  const loadProductType = (productType: string) => {
-    setFilter({
-      ...filter,
-      type: productType
-    })
+  const onPageChange = (pageNumber: number, rowsPerPage: number, sortingOrder: string) => {
+    setRowsPerPage(rowsPerPage);
+    setPageNumber(pageNumber);
+    setSortingOrder(sortingOrder);
+  };
+
+  const handleTabClick = (selectedTab: TabType) => {
+    setCurrentTab(selectedTab);
   };
 
   return (
     <>
       <PageHeader
+        label="Products"
         breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
-        actions={[{ label: "Create", variant: "secondary", onClick: () => navigate("/secure/products/create") }]}
+        actions={[{ label: "Create Product", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/products/create") }]}
+        className="px-4"
       >
-        <div>
-          <div className="sm:hidden">
-            <Dropdown variant="secondary" options={productTypes} onChange={section => loadProductType(section)} buttonClassName="text-secondary" value={productTypes[0]} showSelectedItem={true} />
-          </div>
-          <div className="hidden sm:block">
-            <nav className="flex space-x-4" aria-label="Tabs">
-              {
-                productTypes.map(t => (
-                  <a key={t}
-                    href="#"
-                    onClick={() => loadProductType(t)}
-                    className={classNames(t === filter.type ? 'bg-primary-200 text-gray-900 hover:bg-primary hover:text-white' : 'text-white hover:bg-primary', 'rounded-md px-3 py-2 text-sm font-medium')}
-                  >{t}</a>
-                ))
-              }
-            </nav>
-          </div>
-        </div>
+        <TabGroup tabs={tabs} currentTab={currentTab} onTabClick={handleTabClick} label="Select a tab" />
       </PageHeader>
       <div className="p-4 shadow-xl rounded-lg">
         <BasicTable
-          data={pageData?.data}
-          columns={productColumns}
+          data={pageData ? pageData.data : []}
+          columns={[...productColumns, actionsColumn]}
           isFetching={isLoading}
           skeletonCount={5}
-          rowsPerPage={pageSize}
+          rowsPerPage={rowsPerPage}
           pageCount={pageData?.total_pages}
+          itemsCount={pageData?.total_items}
+          onRowSelection={setRowSelection}
           onPageChange={onPageChange}
         />
-      </div>
-
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="mt-8 flow-root">
-          <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   )

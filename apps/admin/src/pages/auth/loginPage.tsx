@@ -24,7 +24,7 @@ const LoginPage: React.FunctionComponent = () => {
     (data: {name: string, staff_id: string}) => {
       console.log()
       setSessionUser(data);
-      navigate('/');
+      navigate('/secure/products');
     },
     (errors) => {
       const { rootError, email, password, rememberMe } = errors;
@@ -45,7 +45,6 @@ const LoginPage: React.FunctionComponent = () => {
     <div className="mx-auto w-full max-w-sm md:max-w-md md:w-96 lg:w-128 xl:w-256 lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
       <div>
         <img className="h-24 w-auto mx-auto" src="/images/berry-global.png" alt="Berry Global" />
-        {/* <img className="h-10 w-auto mx-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" /> */}
         <h2 className="mt-2 text-2xl font-bold leading-9 tracking-tight text-gray-900 text-center">
           Sign in to your account
         </h2>

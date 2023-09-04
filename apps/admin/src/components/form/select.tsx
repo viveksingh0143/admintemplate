@@ -7,8 +7,8 @@ type SelectProps<T extends { [K in LabelKey | ValueKey]: string }, LabelKey exte
   name: string;
   label: string;
   options: T[] | string[];
-  labelKey?: LabelKey; // Property to use for label if options are objects
-  valueKey?: ValueKey; // Property to use for value if options are objects
+  labelKey?: LabelKey;
+  valueKey?: ValueKey;
   required?: boolean;
   className?: string;
   labelClassName?: string;

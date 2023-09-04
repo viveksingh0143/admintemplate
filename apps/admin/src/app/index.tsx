@@ -10,10 +10,22 @@ import LoginPage from '@pages/auth/loginPage';
 import RegisterPage from '@pages/auth/registerPage';
 import HomePage from '@pages/secure/homePage';
 import ProductListPage from '@pages/secure/products/productListPage';
-import ProductCreatePage from '@pages/secure/products/productCreatePage';
-import ContainerListPage from '@pages/secure/warehouse/containers/containerListPage';
-import ContainerCreatePage from '@pages/secure/warehouse/containers/containerCreatePage';
+import ProductFormPage from '@pages/secure/products/productFormPage';
 import InventoryListPage from '@pages/secure/warehouse/inventories/inventoryListPage';
+import NotFoundPage from '@pages/secure/notFoundPage';
+import ProductDetailPage from '@pages/secure/products/productDetailPage';
+import { NotificationProvider } from '@hooks/notificationContext';
+import GlobalNotification from '@components/ui/globalNotification';
+import ContainerListPage from '@pages/secure/warehouse/containers/containerListPage';
+import ContainerFormPage from '@pages/secure/warehouse/containers/containerFormPage';
+import ContainerDetailPage from '@pages/secure/warehouse/containers/containerDetailPage';
+import StoreListPage from '@pages/secure/warehouse/stores/storeListPage';
+import StoreFormPage from '@pages/secure/warehouse/stores/storeFormPage';
+import StoreDetailPage from '@pages/secure/warehouse/stores/storeDetailPage';
+import StockinRawMaterialPage from '@pages/secure/warehouse/inventories/stockinRawMaterialPage';
+import StockinFinishedGoodsPage from '@pages/secure/warehouse/inventories/stockinFinishedGoodsPage';
+import BatchListPage from '@pages/secure/warehouse/batches/batchListPage';
+import BatchFormPage from '@pages/secure/warehouse/batches/batchFormPage';
 
 
 const router = createBrowserRouter([
@@ -33,6 +45,10 @@ const router = createBrowserRouter([
         path: 'register',
         element: <RegisterPage />,
       },
+      {
+        path: "*",
+        element: <NotFoundPage />,
+      },
     ]
   },
   {
@@ -41,53 +57,132 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: <Navigate to='/auth/login' />,
       },
       {
-        path: "/secure/products",
-        element: <ProductListPage />
-      },
-      {
-        path: "/secure/products/create",
-        element: <ProductCreatePage />
-      },
-      {
-        path: "/secure/warehouse",
-        children: [
+        path: "secure",children: [
           {
-            path: "containers",
+            index: true,
+            element: <Navigate to='/secure/dashboard' />,
+          },
+          {
+            path: "dashboard",
+            element: <HomePage />,
+          },
+          {
+            path: "products",
             children: [
               {
                 index: true,
-                element: <ContainerListPage />,
+                element: <ProductListPage />,
               },
               {
                 path: "create",
-                element: <ContainerCreatePage />
+                element: <ProductFormPage />
+              },
+              {
+                path: ":id",
+                element: <ProductDetailPage />
+              },
+              {
+                path: ":id/edit",
+                element: <ProductFormPage />
               }
             ]
           },
           {
-            path: "inventories",
+            path: "warehouse",
             children: [
               {
-                index: true,
-                element: <InventoryListPage />,
+                path: "batches",
+                children: [
+                  {
+                    index: true,
+                    element: <BatchListPage />,
+                  },
+                  {
+                    path: "create",
+                    element: <BatchFormPage />
+                  },
+                  {
+                    path: ":id",
+                    element: <ContainerDetailPage />
+                  },
+                  {
+                    path: ":id/edit",
+                    element: <BatchFormPage />
+                  }
+                ]
               },
               {
-                path: "create",
-                element: <ContainerCreatePage />
-              }
+                path: "containers",
+                children: [
+                  {
+                    index: true,
+                    element: <ContainerListPage />,
+                  },
+                  {
+                    path: "create",
+                    element: <ContainerFormPage />
+                  },
+                  {
+                    path: ":id",
+                    element: <ContainerDetailPage />
+                  },
+                  {
+                    path: ":id/edit",
+                    element: <ContainerFormPage />
+                  }
+                ]
+              },
+              {
+                path: "stores",
+                children: [
+                  {
+                    index: true,
+                    element: <StoreListPage />,
+                  },
+                  {
+                    path: "create",
+                    element: <StoreFormPage />
+                  },
+                  {
+                    path: ":id",
+                    element: <StoreDetailPage />
+                  },
+                  {
+                    path: ":id/edit",
+                    element: <StoreFormPage />
+                  }
+                ]
+              },
+              {
+                path: "inventories",
+                children: [
+                  {
+                    index: true,
+                    element: <InventoryListPage />,
+                  },
+                  {
+                    path: "stockin-raw-material",
+                    element: <StockinRawMaterialPage />
+                  },
+                  {
+                    path: "stockin-finished-goods",
+                    element: <StockinFinishedGoodsPage />
+                  },
+                ]
+              },
             ]
           },
-        ]
+        ],
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />
       },
     ]
-  },
-  {
-    path: "/*",
-    element: <Navigate to='/auth/login' />,
-  },
+  }
 ]);
 const queryClient = new QueryClient();
 queryClient.getQueryCache().subscribe((event) => {
@@ -99,12 +194,15 @@ queryClient.getQueryCache().subscribe((event) => {
 const App: React.FC = () => {
   return (
     <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <ThemeContextProvider>
-          <RouterProvider router={router} />
-        </ThemeContextProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <NotificationProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeContextProvider>
+            <RouterProvider router={router} />
+          </ThemeContextProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+        <GlobalNotification />
+      </NotificationProvider>
     </React.StrictMode>
   );
 };

@@ -3,6 +3,7 @@ import { classNames } from '@lib/utils';
 import React from 'react';
 import Dropdown from './dropdown';
 import Button, { ButtonProps } from './button';
+import { useThemeContext } from '@hooks/themeContext';
 
 interface BreadcrumbLink {
   label: string;
@@ -22,9 +23,12 @@ type PageHeaderProps = {
   actions?: ButtonProps[] | null;
   children?: any | null;
   showBreadCrumb?: boolean;
+  className?: string;
 };
 
-const PageHeader: React.FC<PageHeaderProps> = ({ showBreadCrumb = false, children, label, breadcrumbs, actions }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ showBreadCrumb = false, children, label, breadcrumbs, actions, className }) => {
+  const { theme } = useThemeContext();
+
   const renderBreadCrumbs = () => {
     if (breadcrumbs) {
       return (
@@ -46,7 +50,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ showBreadCrumb = false, childre
                   </div>
                 </li>
               ))}
-            </ol>
+            </ol>you
           </nav>
         </div>
       );
@@ -60,12 +64,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({ showBreadCrumb = false, childre
       return (
         <>
           <div className="hidden sm:flex gap-3">
-            { actions.map(action => (
-              <Button {...action} />
+            {actions.map((action, index) => (
+              <Button key={index} {...action} />
             ))}
           </div>
-          <Dropdown rootClassName='flex sm:hidden' optionsGroupClassName="top-9"
-            options={actions} variant="none" buttonClassName="text-primary" chevron={false} buttonIcon={<EllipsisVerticalIcon className="h-6 w-6 mr-1" />} />
+          <Dropdown rootClassName='flex sm:hidden' optionsGroupClassName="top-7 w-72" optionClassName="py-4 px-4"
+            options={actions} variant="none" buttonClassName="text-primary pr-0" chevron={false} buttonIcon={<EllipsisVerticalIcon className="h-6 w-6" />} />
         </>
       );
     } else {
@@ -74,18 +78,17 @@ const PageHeader: React.FC<PageHeaderProps> = ({ showBreadCrumb = false, childre
   };
 
   return (
-    <div className="bg-primary-500 px-2 py-5 sm:px-6">
-      { showBreadCrumb && renderBreadCrumbs() }
+    <div className={classNames("px-2 pt-4 sm:px-6", theme.hasColorBg ? "bg-primary-500 text-white" : "text-gray-600", className)}>
+      {showBreadCrumb && renderBreadCrumbs()}
       <div className={classNames("flex items-center justify-between", { "mt-6": showBreadCrumb })}>
         <div className="min-w-0 flex-1">
-          { children ? children : (
-            <h2 className="text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight">
-            { label }
+          <h2 className="text-2xl font-bold leading-7 sm:truncate sm:text-xl sm:tracking-tight">
+            {label}
           </h2>
-          )}
         </div>
         {renderActionButtons()}
       </div>
+      { children }
     </div>
   );
 };

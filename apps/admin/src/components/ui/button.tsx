@@ -23,12 +23,12 @@ export type ButtonProps = ButtonChildrenProps | ButtonInlineProps;
 
 const Button: React.FC<ButtonProps> = (props) => {
   const variantClasses = {
-    primary: "bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600",
-    secondary: "bg-secondary-600 text-white hover:bg-secondary-700 focus-visible:outline-secondary-600",
-    success: "bg-success-600 text-white hover:bg-success-700 focus-visible:outline-success-600",
-    warning: "bg-warning-600 text-white hover:bg-warning-700 focus-visible:outline-warning-600",
-    info: "bg-info-600 text-white hover:bg-info-700 focus-visible:outline-info-600",
-    danger: "bg-danger-600 text-white hover:bg-danger-700 focus-visible:outline-danger-600",
+    primary: "bg-primary text-white hover:bg-primary-800 focus-visible:outline-primary",
+    secondary: "bg-secondary text-white hover:bg-secondary-800 focus-visible:outline-secondary",
+    success: "bg-success text-white hover:bg-success-800 focus-visible:outline-success",
+    warning: "bg-warning text-white hover:bg-warning-800 focus-visible:outline-warning",
+    info: "bg-info text-white hover:bg-info-800 focus-visible:outline-info",
+    danger: "bg-danger text-white hover:bg-danger-800 focus-visible:outline-danger",
     none: "",
   }[props.variant];
   
