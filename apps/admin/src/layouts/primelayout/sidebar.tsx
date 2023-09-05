@@ -12,6 +12,9 @@ const topSidebarNavs = [
   { name: 'Inventory', href: '/secure/warehouse/inventories', icon: Square3Stack3DIcon },
   { name: 'Stores', href: '/secure/warehouse/stores', icon: BuildingStorefrontIcon },
   { name: 'Batches', href: '/secure/warehouse/batches', icon: BuildingStorefrontIcon },
+  { name: 'Machines', href: '/secure/machines', icon: BuildingStorefrontIcon },
+  { name: 'Customers', href: '/secure/customers', icon: BuildingStorefrontIcon },
+  
   // { name: 'Calendar', href: '/secure/calendar', icon: CalendarIcon },
   // { name: 'Reports', href: '/secure/reports', icon: ChartPieIcon },
 ];

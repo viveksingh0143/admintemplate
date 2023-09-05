@@ -2,6 +2,8 @@ export const API_URLS = {
   LOGIN_API: "/auth/login",
   REFRESH_API: "/refresh-token",
   PRODUCT_API: "/secure/products",
+  MACHINE_API: "/secure/machines",
+  CUSTOMER_API: "/secure/customers",
   WAREHOUSE: {
     CONTAINER_API: "/secure/warehouse/containers",
     STORE_API: "/secure/warehouse/stores",

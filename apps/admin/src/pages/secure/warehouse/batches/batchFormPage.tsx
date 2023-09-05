@@ -10,6 +10,9 @@ import { z } from 'zod';
 import { CommonConstant } from '@configs/constants/common';
 import { useBatchDetail, useBatchFormServiceHook } from '@hooks/warehouse/batches/batchesHooks';
 import { useWatch } from 'react-hook-form';
+import { useCustomerList } from '@hooks/customers/customersHooks';
+import { useProductList } from '@hooks/products/productsHooks';
+import { useMachineList } from '@hooks/machines/machinesHooks';
 
 const batchSchema = z.object({
   batch_date: z.coerce.date({
@@ -38,6 +41,9 @@ const BatchFormPage: React.FunctionComponent = () => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
 
+  const { data: customers, isLoading: isCustomerLoading, error: customerError } = useCustomerList(1, 2000, "", {});
+  const { data: products, isLoading: isProductLoading, error: productError } = useProductList(1, 2000, "", { type: "Finished Goods" });
+  const { data: machines, isLoading: isMachineLoading, error: machineError } = useMachineList(1, 2000, "", {});
   const { data: formData, isLoading: isDataLoading, error } = useBatchDetail(id, { enabled: isEditMode });
 
   const methods = useEasyForm(batchSchema);
@@ -127,13 +133,13 @@ const BatchFormPage: React.FunctionComponent = () => {
               <Input name="so_number" label="SO Number" placeholder="Please enter SO number" className='sm:col-span-6' />
               <Input type='number' name="target_quantity" label="Target Quantity" placeholder="Please enter target quantity" className='sm:col-span-6' />
 
-              <Select name="customer_id" label="Customer Name" placeholder="Please select customer" options={[]} className='sm:col-span-6' />
+              <Select name="customer_id" label="Customer Name" placeholder="Please select customer" options={customers?.data} labelKey='name' valueKey='id' className='sm:col-span-6' selectClassName="rounded-lg" />
               <Select name="po_category" label="PO Category" placeholder="Please enter PO category" options={CommonConstant.PO_CATEGORIES} className='sm:col-span-6' />
               
-              <Select name="product_id" label="Product Code" placeholder="Please select product" options={[]} className='sm:col-span-6' />
+              <Select name="product_id" label="Product Code" placeholder="Please enter Product Code" options={products?.data} labelKey='code' valueKey='id' className='sm:col-span-6' selectClassName="rounded-lg" />
               <Input name="product_name" label="Product Name" placeholder="Please enter product name" className='sm:col-span-6' disabled={true} />
 
-              <Select name="machine_id" label="Machine Code" placeholder="Please select machine" options={[]} className='sm:col-span-6' />
+              <Select name="machine_id" label="Machine Code" placeholder="Please enter machine" options={machines?.data} labelKey='code' valueKey='id' className='sm:col-span-6' selectClassName="rounded-lg" />
               <Input name="machine_name" label="Machine Name" placeholder="Please enter machine name" className='sm:col-span-6' disabled={true} />
 
               <Input type='number' name="unit_weight" label="Unit Weight" placeholder="Please enter unit weight" className='sm:col-span-6' />

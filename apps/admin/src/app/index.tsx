@@ -26,6 +26,12 @@ import StockinRawMaterialPage from '@pages/secure/warehouse/inventories/stockinR
 import StockinFinishedGoodsPage from '@pages/secure/warehouse/inventories/stockinFinishedGoodsPage';
 import BatchListPage from '@pages/secure/warehouse/batches/batchListPage';
 import BatchFormPage from '@pages/secure/warehouse/batches/batchFormPage';
+import MachineListPage from '@pages/secure/machines/machineListPage';
+import MachineFormPage from '@pages/secure/machines/machineFormPage';
+import MachineDetailPage from '@pages/secure/machines/machineDetailPage';
+import CustomerListPage from '@pages/secure/customers/customerListPage';
+import CustomerDetailPage from '@pages/secure/customers/customerDetailPage';
+import CustomerFormPage from '@pages/secure/customers/customerFormPage';
 
 
 const router = createBrowserRouter([
@@ -87,6 +93,48 @@ const router = createBrowserRouter([
               {
                 path: ":id/edit",
                 element: <ProductFormPage />
+              }
+            ]
+          },
+          {
+            path: "machines",
+            children: [
+              {
+                index: true,
+                element: <MachineListPage />,
+              },
+              {
+                path: "create",
+                element: <MachineFormPage />
+              },
+              {
+                path: ":id",
+                element: <MachineDetailPage />
+              },
+              {
+                path: ":id/edit",
+                element: <MachineFormPage />
+              }
+            ]
+          },
+          {
+            path: "customers",
+            children: [
+              {
+                index: true,
+                element: <CustomerListPage />,
+              },
+              {
+                path: "create",
+                element: <CustomerFormPage />
+              },
+              {
+                path: ":id",
+                element: <CustomerDetailPage />
+              },
+              {
+                path: ":id/edit",
+                element: <CustomerFormPage />
               }
             ]
           },
