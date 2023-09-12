@@ -68,8 +68,6 @@ const StockinFinishedGoodsPage: React.FunctionComponent = () => {
     resetFormHandler();
   }, [products, resetForm]);
 
-  console.log("Form Render");
-
   return (
     <>
       <PageHeader label="Stock In - Finished Goods"

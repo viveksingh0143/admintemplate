@@ -7,14 +7,16 @@ import { ClassDictionary, classNames } from '@lib/utils';
 
 const topSidebarNavs = [
   // { name: 'Dashboard', href: '/secure/dashboard', icon: HomeIcon },
-  { name: 'Products', href: '/secure/products', icon: FolderIcon },
-  { name: 'Containers', href: '/secure/warehouse/containers', icon: DocumentDuplicateIcon },
+  { name: 'Products', href: '/secure/master/products', icon: FolderIcon },
+  { name: 'Containers', href: '/secure/master/containers', icon: DocumentDuplicateIcon },
+  { name: 'Stores', href: '/secure/master/stores', icon: BuildingStorefrontIcon },
+  { name: 'Machines', href: '/secure/master/machines', icon: BuildingStorefrontIcon },
+  { name: 'Customers', href: '/secure/master/customers', icon: BuildingStorefrontIcon },
+  { name: 'Users', href: '/secure/admin/users', icon: BuildingStorefrontIcon },
+  { name: 'Roles', href: '/secure/admin/roles', icon: BuildingStorefrontIcon },
+
+  { name: 'Batch Labels', href: '/secure/warehouse/batchlabels', icon: BuildingStorefrontIcon },
   { name: 'Inventory', href: '/secure/warehouse/inventories', icon: Square3Stack3DIcon },
-  { name: 'Stores', href: '/secure/warehouse/stores', icon: BuildingStorefrontIcon },
-  { name: 'Batches', href: '/secure/warehouse/batches', icon: BuildingStorefrontIcon },
-  { name: 'Machines', href: '/secure/machines', icon: BuildingStorefrontIcon },
-  { name: 'Customers', href: '/secure/customers', icon: BuildingStorefrontIcon },
-  
   // { name: 'Calendar', href: '/secure/calendar', icon: CalendarIcon },
   // { name: 'Reports', href: '/secure/reports', icon: ChartPieIcon },
 ];

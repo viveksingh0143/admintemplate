@@ -1,17 +1,24 @@
 export const API_URLS = {
+  USER_API: "/admin/users",
+  ROLE_API: "/admin/roles",
   LOGIN_API: "/auth/login",
-  REFRESH_API: "/refresh-token",
-  PRODUCT_API: "/secure/products",
-  MACHINE_API: "/secure/machines",
-  CUSTOMER_API: "/secure/customers",
+  REFRESH_API: "auth/refresh-token",
+  MASTER: {
+    PRODUCT_API: "/master/products",
+    MACHINE_API: "/master/machines",
+    CUSTOMER_API: "/master/customers",
+    STORE_API: "/master/stores",
+    CONTAINER_API: "/master/containers",
+  },
   WAREHOUSE: {
-    CONTAINER_API: "/secure/warehouse/containers",
-    STORE_API: "/secure/warehouse/stores",
-    INVENTORY_API: "/secure/warehouse/inventories",
-    PACKAGING_LABEL_API: "/secure/warehouse/packaging-labels",
-    BATCH_API: "/secure/warehouse/batches",
-    INVENTORY_FINISHED_GOODS_API: "/secure/warehouse/inventories/finished-goods",
-    INVENTORY_RAW_MATERIAL_API: "/secure/warehouse/inventories/raw-material",
+    BATCH_LABEL_API: "/warehouse/batchlabels",
+    LABEL_STICKER_API: "/warehouse/labelstickers",
+
+    INVENTORY_API: "/warehouse/inventories",
+    PACKAGING_LABEL_API: "/warehouse/packaging-labels",
+    
+    INVENTORY_FINISHED_GOODS_API: "/warehouse/inventories/finished-goods",
+    INVENTORY_RAW_MATERIAL_API: "/warehouse/inventories/raw-material",
   },
 } as const;
 

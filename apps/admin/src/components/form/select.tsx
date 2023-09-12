@@ -50,9 +50,9 @@ const Select = <T extends { [K in LabelKey | ValueKey]: string }, LabelKey exten
           options.map((option, index) => (
             <option
               key={index}
-              value={typeof option === 'string' ? option : option[valueKey]}
+              value={typeof option === 'string' ? option : (option[valueKey as keyof typeof option])}
             >
-              {typeof option === 'string' ? option : option[labelKey]}
+              {typeof option === 'string' ? option : (option[labelKey as keyof typeof option])}
             </option>
           ))}
       </select>

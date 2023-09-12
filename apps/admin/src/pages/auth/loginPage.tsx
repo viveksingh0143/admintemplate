@@ -3,34 +3,39 @@ import Button from '@components/ui/button';
 import LoadingOverlay from '@components/ui/loadingOverlay';
 import { Notification, NotificationHandles } from '@components/ui/notification';
 import { useLogin } from '@hooks/auth/useLogin';
+import { useAxiosMutation } from '@hooks/common/useCommonAxiosActions';
 import { useThemeContext } from '@hooks/themeContext';
+import { loginRequesst } from '@services/authService';
+import AxiosService from '@services/axiosService';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { z }  from 'zod';
+import { z } from 'zod';
 
 const loginSchema = z.object({
-  email: z.string().nonempty("Email address is required").email("Please enter a valid email address"),
+  username: z.string().nonempty("Email address is required").email("Please enter a valid email address"),
   password: z.string().nonempty("Please enter your password"),
-  rememberMe: z.boolean()
+  remember_me: z.boolean()
 });
 
 const LoginPage: React.FunctionComponent = () => {
-  const {sessionUser, setSessionUser} = useThemeContext();
+  const { setSessionUser } = useThemeContext();
   const navigate = useNavigate();
   const methods = useEasyForm(loginSchema);
-  const { setError, formState: { isLoading, isSubmitting } } = methods;
+  const { setError, formState: { errors, isLoading, isSubmitting } } = methods;
   const notificationRef = useRef<NotificationHandles>(null);
-  const mutation = useLogin(
-    (data: {name: string, staff_id: string}) => {
-      console.log()
-      setSessionUser(data);
-      navigate('/secure/products');
+  const mutation = useAxiosMutation(
+    loginRequesst,
+    (data) => {
+      const { access_token, refresh_token } = data.data;
+      AxiosService.getInstance().updateAccessToken({ access_token, refresh_token });
+      setSessionUser(data.data);
+      navigate('/secure/master/products');
     },
     (errors) => {
-      const { rootError, email, password, rememberMe } = errors;
-      setError("email", email?.message);
-      setError("password", password?.message);
-      setError("rememberMe", rememberMe?.message);
+      const { rootError, username, password, remember_me } = errors;
+      setError("username", { type: "manual", message: username?.message });
+      setError("password", { type: "manual", message: password?.message });
+      setError("remember_me", { type: "manual", message: remember_me?.message });
       if (rootError?.message && notificationRef.current) {
         notificationRef.current.showNotification(rootError?.message, "danger");
       }
@@ -38,7 +43,7 @@ const LoginPage: React.FunctionComponent = () => {
   );
 
   const handleSubmit = async (data: z.infer<typeof loginSchema>) => {
-    mutation.mutate({ username: data.email, password: data.password, rememberMe: data.rememberMe });
+    mutation.mutate({ username: data.username, password: data.password, remember_me: data.remember_me });
   };
 
   return (
@@ -55,12 +60,11 @@ const LoginPage: React.FunctionComponent = () => {
           <LoadingOverlay isLoading={isLoading || isSubmitting} />
           <div>
             <Notification ref={notificationRef} type="danger" fixed={false} className='mb-4' />
-
             <EasyForm methods={methods} onSubmit={handleSubmit} className="space-y-6">
-              <Input name="email" label="Email address" placeholder="Please enter your email address" />
+              <Input name="username" label="Email address" placeholder="Please enter your email address" />
               <Input type="password" name="password" label="Password" placeholder="Please enter your password" />
               <div className="flex items-center justify-between">
-                <Checkbox name="rememberMe" label="Remember me" />
+                <Checkbox name="remember_me" label="Remember me" />
                 <div className="text-sm leading-6">
                   <a href="#" className="font-semibold text-primary-600 hover:text-primary-500">
                     Forgot password?

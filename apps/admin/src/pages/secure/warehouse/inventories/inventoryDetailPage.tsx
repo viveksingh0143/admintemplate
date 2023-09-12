@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useProductDetail } from "@hooks/products/productsHooks";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { Chip } from "@components/ui";
+import { format } from "date-fns";
 
 const ProductDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -15,8 +16,8 @@ const ProductDetailPage: React.FC = () => {
         label={`Product Detail - ${pageData?.name}`}
         breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
         actions={[
-          { label: "Edit Product", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/products/" + id + "/edit") },
-          { label: "List Products", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/products") }
+          { label: "Edit Product", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products/" + id + "/edit") },
+          { label: "List Products", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products") }
         ]}
         className="px-4"
       />
@@ -65,9 +66,9 @@ const ProductDetailPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="ml-4 flex-shrink-0">
-                      <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                        { pageData?.created_at }
-                      </a>
+                      <div className="font-medium text-primary-600 hover:text-primary-500">
+                        { pageData?.created_at ? format(new Date(pageData?.created_at), 'yyyy-MM-dd hh::mm:ss a') : null }
+                      </div>
                     </div>
                   </li>
                   <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
@@ -78,9 +79,9 @@ const ProductDetailPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="ml-4 flex-shrink-0">
-                      <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                        { pageData?.updated_at }
-                      </a>
+                      <div className="font-medium text-primary-600 hover:text-primary-500">
+                        { pageData?.updated_at ? format(new Date(pageData?.updated_at), 'yyyy-MM-dd hh::mm:ss a') : null }
+                      </div>
                     </div>
                   </li>
                   <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">

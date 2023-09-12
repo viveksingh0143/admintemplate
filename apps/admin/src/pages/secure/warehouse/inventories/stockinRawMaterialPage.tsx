@@ -33,13 +33,6 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
   const errorsFn = (errors: any) => {
     setShowNotification('Stock updated and stickers sent to printer successfully', 'success');
     navigate('/secure/warehouse/inventories')
-    // const { rootError, code, name, description, unit, type } = errors;
-    //   setError("product_id", code?.product_id);
-    //   setError("quantity", name?.quantity);
-    //   setError("pallet", description?.pallet);
-    //   if (rootError?.message && notificationRef.current) {
-    //     notificationRef.current.showNotification(rootError?.message, "danger");
-    //   }
   };
 
   const mutation = useInventoryFormServiceHook(successFn, errorsFn);
@@ -58,8 +51,6 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
   useEffect(() => {
     resetFormHandler();
   }, [products, resetForm]);
-
-  console.log("Form Render");
 
   return (
     <>

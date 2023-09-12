@@ -9,7 +9,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({ rowsPerPage, currentPage, totalPages, itemsCount, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ rowsPerPage, currentPage, totalPages, itemsCount = 0, onPageChange }) => {
   const renderPageNumbers = () => {
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -61,8 +61,10 @@ const Pagination: React.FC<PaginationProps> = ({ rowsPerPage, currentPage, total
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-gray-700">
+            Page <span className="font-medium">{currentPage}</span> | 
             Showing <span className="font-medium">{((currentPage - 1) * rowsPerPage) + 1}</span> to{' '}
-            <span className="font-medium">{currentPage * rowsPerPage}</span> of <span className="font-medium">{itemsCount}</span> results
+            <span className="font-medium">{Math.min(currentPage * rowsPerPage, itemsCount)}</span> of{' '}
+            <span className="font-medium">{itemsCount}</span> results
           </p>
         </div>
         <div>

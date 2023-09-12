@@ -24,9 +24,9 @@ export const useBatchFormServiceHook = (isEditMode: boolean, id: string | undefi
     async (data: FormDataType) => {
       let response;
       if (isEditMode) {
-        response = await AxiosService.getInstance().axiosInstance.put(API_URLS.WAREHOUSE.BATCH_API + "/" + id, data);
+        response = await AxiosService.getInstance().axiosInstance.put(API_URLS.WAREHOUSE.BATCH_LABEL_API + "/" + id, data);
       } else {
-        response = await AxiosService.getInstance().axiosInstance.post(API_URLS.WAREHOUSE.BATCH_API, data);
+        response = await AxiosService.getInstance().axiosInstance.post(API_URLS.WAREHOUSE.BATCH_LABEL_API, data);
       }
       return response.data;
     },
@@ -42,7 +42,7 @@ export const useBatchFormServiceHook = (isEditMode: boolean, id: string | undefi
 
 export const useBatchList = (page: number, pageSize: number, sort: string, filter: { location?: string,  name?: string,  status?: string,  owner_id?: string }, configs = {}) => {
   return useQuery(['batch-list', page, pageSize, sort, filter], async () => {
-    const API_URL = AxiosService.getInstance().getUrlWithParams(API_URLS.WAREHOUSE.BATCH_API, { page, pageSize, sort, ...filter });
+    const API_URL = AxiosService.getInstance().getUrlWithParams(API_URLS.WAREHOUSE.BATCH_LABEL_API, { page, pageSize, sort, ...filter });
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {
@@ -54,7 +54,7 @@ export const useBatchList = (page: number, pageSize: number, sort: string, filte
 
 export const useBatchDetail = (id: number | string | undefined, configs = {}) => {
   return useQuery(['batch-detail', id], async () => {
-    const API_URL = `${API_URLS.WAREHOUSE.BATCH_API}/${id}`;
+    const API_URL = `${API_URLS.WAREHOUSE.BATCH_LABEL_API}/${id}`;
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {
@@ -62,4 +62,23 @@ export const useBatchDetail = (id: number | string | undefined, configs = {}) =>
     retry: 0,
     ...configs
   });
+};
+
+
+export const useBatchPrintFormServiceHook = (id: string | undefined, onSuccess: (data: any) => void, onError: (errors: any) => void) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async (data: { labelsRequired: number }) => {
+      const response = await AxiosService.getInstance().axiosInstance.put(API_URLS.WAREHOUSE.BATCH_LABEL_API + "/" + id + "/stickers", data);
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries();
+        onSuccess(data);
+      },
+      onError: (error: any) => handleAxiosErrorResponse(error, onError)
+    }
+  );
 };

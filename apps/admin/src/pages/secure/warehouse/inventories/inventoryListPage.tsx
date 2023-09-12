@@ -8,7 +8,7 @@ import { CommonConstant } from "@configs/constants/common";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@components/ui";
 import { EyeIcon } from "@heroicons/react/20/solid";
-import { productColumns } from "@pages/secure/products/productsDef";
+import { productColumns } from "@pages/secure/master/products/productsDef";
 
 const tabs: TabType[] = [{ name: "RAW Material" }, { name: "Finished Goods" }];
 

@@ -27,9 +27,9 @@ export const useCustomerFormServiceHook = (isEditMode: boolean, id: string | und
     async (data: FormDataType) => {
       let response;
       if (isEditMode) {
-        response = await AxiosService.getInstance().axiosInstance.put(API_URLS.CUSTOMER_API + "/" + id, data);
+        response = await AxiosService.getInstance().axiosInstance.put(API_URLS.MASTER.CUSTOMER_API + "/" + id, data);
       } else {
-        response = await AxiosService.getInstance().axiosInstance.post(API_URLS.CUSTOMER_API, data);
+        response = await AxiosService.getInstance().axiosInstance.post(API_URLS.MASTER.CUSTOMER_API, data);
       }
       return response.data;
     },
@@ -45,7 +45,7 @@ export const useCustomerFormServiceHook = (isEditMode: boolean, id: string | und
 
 export const useCustomerList = (page: number, pageSize: number, sort: string, filter: { code?: string,  contact_person?: string,  name?: string,  status?: string }, configs = {}) => {
   return useQuery(['customer-list', page, pageSize, sort, filter], async () => {
-    const API_URL = AxiosService.getInstance().getUrlWithParams(API_URLS.CUSTOMER_API, { page, pageSize, sort, ...filter });
+    const API_URL = AxiosService.getInstance().getUrlWithParams(API_URLS.MASTER.CUSTOMER_API, { page, pageSize, sort, ...filter });
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {
@@ -57,7 +57,7 @@ export const useCustomerList = (page: number, pageSize: number, sort: string, fi
 
 export const useCustomerDetail = (id: number | string | undefined, configs = {}) => {
   return useQuery(['customer-detail', id], async () => {
-    const API_URL = `${API_URLS.CUSTOMER_API}/${id}`;
+    const API_URL = `${API_URLS.MASTER.CUSTOMER_API}/${id}`;
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {

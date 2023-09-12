@@ -22,6 +22,15 @@ type ButtonInlineProps = {
 export type ButtonProps = ButtonChildrenProps | ButtonInlineProps;
 
 const Button: React.FC<ButtonProps> = (props) => {
+  let buttonProps: ComponentProps<'button'> = {};
+
+  if ("children" in props) {
+    const { variant, loading, loadingText, children, onClick, ...rest } = props;
+    buttonProps = rest;
+  } else if ("label" in props || "icon" in props) {
+    const { variant, loading, loadingText, label, icon, onClick, ...rest } = props;
+    buttonProps = rest;
+  }
   const variantClasses = {
     primary: "bg-primary text-white hover:bg-primary-800 focus-visible:outline-primary",
     secondary: "bg-secondary text-white hover:bg-secondary-800 focus-visible:outline-secondary",
@@ -46,7 +55,7 @@ const Button: React.FC<ButtonProps> = (props) => {
   };
 
   return (
-    <button
+    <button {...buttonProps}
       className={classNames('px-4 py-2 rounded-lg text-sm font-medium leading-6 shadow-sm focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2', variantClasses, props.className)}
       disabled={props.loading}
       onClick={props.onClick}

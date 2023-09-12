@@ -16,7 +16,7 @@ const InputOption: React.FC<InputOptionProps> = ({
   type,
   name,
   label,
-  required,
+  required = false,
   className,
   labelClassName,
   inputClassName,

@@ -16,9 +16,9 @@ export const useMachineFormServiceHook = (isEditMode: boolean, id: string | unde
     async (data: FormDataType) => {
       let response;
       if (isEditMode) {
-        response = await AxiosService.getInstance().axiosInstance.put(API_URLS.MACHINE_API + "/" + id, data);
+        response = await AxiosService.getInstance().axiosInstance.put(API_URLS.MASTER.MACHINE_API + "/" + id, data);
       } else {
-        response = await AxiosService.getInstance().axiosInstance.post(API_URLS.MACHINE_API, data);
+        response = await AxiosService.getInstance().axiosInstance.post(API_URLS.MASTER.MACHINE_API, data);
       }
       return response.data;
     },
@@ -34,7 +34,7 @@ export const useMachineFormServiceHook = (isEditMode: boolean, id: string | unde
 
 export const useMachineList = (page: number, pageSize: number, sort: string, filter: { code?: string,  name?: string,  status?: string }, configs = {}) => {
   return useQuery(['machine-list', page, pageSize, sort, filter], async () => {
-    const API_URL = AxiosService.getInstance().getUrlWithParams(API_URLS.MACHINE_API, { page, pageSize, sort, ...filter });
+    const API_URL = AxiosService.getInstance().getUrlWithParams(API_URLS.MASTER.MACHINE_API, { page, pageSize, sort, ...filter });
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {
@@ -46,7 +46,7 @@ export const useMachineList = (page: number, pageSize: number, sort: string, fil
 
 export const useMachineDetail = (id: number | string | undefined, configs = {}) => {
   return useQuery(['machine-detail', id], async () => {
-    const API_URL = `${API_URLS.MACHINE_API}/${id}`;
+    const API_URL = `${API_URLS.MASTER.MACHINE_API}/${id}`;
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {
