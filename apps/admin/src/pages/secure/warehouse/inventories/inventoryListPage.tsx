@@ -1,42 +1,43 @@
 import PageHeader from "@components/ui/pageHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useProductList } from "@hooks/products/productsHooks";
 import BasicTable from "@components/ui/basicTable";
 import TabGroup, { TabType } from "@components/ui/tabs";
 import { CommonConstant } from "@configs/constants/common";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@components/ui";
 import { EyeIcon } from "@heroicons/react/20/solid";
-import { productColumns } from "@pages/secure/master/products/productsDef";
-
-const tabs: TabType[] = [{ name: "RAW Material" }, { name: "Finished Goods" }];
+import { useAxiosQueryWithParams } from "@hooks/common/useCommonAxiosActions";
+import { API_URLS } from "@configs/constants/apiUrls";
+import { inventoryColumns } from "./inventoryDef";
 
 const InventoryListPage: React.FC = () => {
   const navigate = useNavigate();
-  const [rowSelection, setRowSelection] = useState({});
-  const [currentTab, setCurrentTab] = useState(tabs[0]);
+  const [tabs, setTabs] = useState<TabType[]>([]);
+  const [currentTab, setCurrentTab] = useState<TabType | null | undefined>(null);
+  const [requestQueryParams, setRequestQueryParams] = useState({});
+  const [rowSelection, setRowSelection] = useState<any[]>([]);
   const [sortingOrder, setSortingOrder] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(CommonConstant.PAGE_INFO.PAGE_SIZE);
-  const { data: pageData, isLoading, error } = useProductList(pageNumber, rowsPerPage, sortingOrder, { type: currentTab.name });
+  const { data: storeData, isLoading: isStoreLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 100, "", { status: "ENABLE" });
+  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.WAREHOUSE.INVENTORY_API, pageNumber, rowsPerPage, sortingOrder, requestQueryParams, {}, currentTab != null);
 
-  // const actionsColumn: ColumnDef<any> = {
-  //   accessorKey: "actions",
-  //   enableSorting: false,
-  //   header: "Actions",
-  //   cell: ({ row }) => (
-  //     <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
-  //       <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/inventories/${row.original.id}`)} />
-  //     </span>
-  //   ),
-  // };
+  const handleTabClick = (selectedTab: TabType) => {
+    const tabParams = selectedTab.data || {}
+    setRequestQueryParams({ ...tabParams })
+    setCurrentTab(selectedTab);
+  };
 
-  const stockColumn: ColumnDef<any> = {
-    accessorKey: "stocks",
+  const actionsColumn: ColumnDef<any> = {
+    accessorKey: "actions",
     enableSorting: false,
-    header: "Stocks",
-    cell: ({ row }) => Math.floor(Math.random() * 100),
+    header: "Actions",
+    cell: ({ row }) => (
+      <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/inventories/${row.original.id}/stocks`)} />
+      </span>
+    ),
   };
 
   const onPageChange = (pageNumber: number, rowsPerPage: number, sortingOrder: string) => {
@@ -45,24 +46,26 @@ const InventoryListPage: React.FC = () => {
     setSortingOrder(sortingOrder);
   };
 
-  const handleTabClick = (selectedTab: TabType) => {
-    setCurrentTab(selectedTab);
-  };
-
-  const navigateStockIn = () => {
-    if (currentTab.name === "RAW Material") {
-      navigate("/secure/warehouse/inventories/stockin-raw-material")
-    } else {
-      navigate("/secure/warehouse/inventories/stockin-finished-goods")
+  useEffect(() => {
+    if (storeData?.data?.length) {
+      const newTabs = storeData?.data?.map((store: any) => ({
+        name: store.name,
+        data: { product_types: store.store_types }
+      })) || [];
+      setTabs(newTabs);
+      setCurrentTab(newTabs[0])
+      handleTabClick(newTabs[0])
     }
-  }
+  }, [storeData]);
 
   return (
     <>
       <PageHeader
         label="Inventories"
-        breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
-        actions={[{ label: "Stock In", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigateStockIn() }]}
+        breadcrumbs={[{ label: "Dashboard" }, { label: "Inventories" }]}
+        actions={[
+          { label: "Add Stock", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/warehouse/inventories/stockin-raw-material") }
+        ]}
         className="px-4"
       >
         <TabGroup tabs={tabs} currentTab={currentTab} onTabClick={handleTabClick} label="Select a tab" />
@@ -70,7 +73,7 @@ const InventoryListPage: React.FC = () => {
       <div className="p-4 shadow-xl rounded-lg">
         <BasicTable
           data={pageData ? pageData.data : []}
-          columns={[...productColumns, stockColumn]}
+          columns={[...inventoryColumns, actionsColumn]}
           isFetching={isLoading}
           skeletonCount={5}
           rowsPerPage={rowsPerPage}

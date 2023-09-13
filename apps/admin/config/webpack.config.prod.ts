@@ -19,7 +19,7 @@ const getConfig = (rootPath: string) => {
     mode: 'production',
     // entry: './src/index.ts', // codes will be inside src folder
     output: {
-      path: path.resolve(__dirname, 'build'),
+      path: path.resolve(rootPath, 'build'),
       publicPath: "/",
       filename: 'index.js',
     },

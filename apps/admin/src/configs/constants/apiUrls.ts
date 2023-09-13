@@ -13,8 +13,9 @@ export const API_URLS = {
   WAREHOUSE: {
     BATCH_LABEL_API: "/warehouse/batchlabels",
     LABEL_STICKER_API: "/warehouse/labelstickers",
-
     INVENTORY_API: "/warehouse/inventories",
+
+    STOCK_API: "/warehouse/stocks",
     PACKAGING_LABEL_API: "/warehouse/packaging-labels",
     
     INVENTORY_FINISHED_GOODS_API: "/warehouse/inventories/finished-goods",

@@ -3,15 +3,17 @@ import Button from '@components/ui/button';
 import LoadingOverlay from '@components/ui/loadingOverlay';
 import { Notification, NotificationHandles } from '@components/ui/notification';
 import PageHeader from '@components/ui/pageHeader';
-import { useInventoryFormServiceHook } from '@hooks/inventories/inventoriesHooks';
+import { API_URLS } from '@configs/constants/apiUrls';
+import { useAxiosMutation, useAxiosQuery, useAxiosQueryWithParams } from '@hooks/common/useCommonAxiosActions';
 import { useNotification } from '@hooks/notificationContext';
-import { useProductList } from '@hooks/products/productsHooks';
+import AxiosService from '@services/axiosService';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 const stockinSchema = z.object({
-  product_id: z.string().nonempty("Pallet is required"),
+  store_id: z.string().nonempty("Store is required"),
+  product_id: z.string().nonempty("Product is required"),
   quantity: z.number().nonnegative("Quantity is required"),
   pallet: z.string().nonempty("Pallet is required"),
 });
@@ -19,38 +21,63 @@ const stockinSchema = z.object({
 const StockinRawMaterialPage: React.FunctionComponent = () => {
   const { setShowNotification } = useNotification();
   const navigate = useNavigate();
+
+  const { data: containerInfoData, isLoading: isContainerInfoDataLoading, error: containerInfoDataError } = useAxiosQuery(`${API_URLS.MASTER.CONTAINER_API}/container-code-info`);
+  const { data: products, isLoading: isProductsLoading, error: productError } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, 1, 2000, "name asc", {}, isContainerInfoDataLoading);
+  const { data: stores, isLoading: isStoreLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 2000, "name asc", {}, isContainerInfoDataLoading);
   
-  const { data: products, isLoading: isProductLoading, error: productError } = useProductList(1, 2000, "", { type: "RAW Material" });
   const methods = useEasyForm(stockinSchema);
-  const { reset: resetForm, setError, formState: { isLoading, isSubmitting } } = methods;
+  const { reset: resetForm, setValue, setError, formState: { errors, isLoading, isSubmitting } } = methods;
   const notificationRef = useRef<NotificationHandles>(null);
 
-  const successFn = () => {
-    setShowNotification('Stock updated successfully', 'success');
-    navigate('/secure/warehouse/inventories')
-  };
-
-  const errorsFn = (errors: any) => {
-    setShowNotification('Stock updated and stickers sent to printer successfully', 'success');
-    navigate('/secure/warehouse/inventories')
-  };
-
-  const mutation = useInventoryFormServiceHook(successFn, errorsFn);
+  const mutation = useAxiosMutation(
+    async (data: any) => {
+      let response = await AxiosService.getInstance().axiosInstance.post(API_URLS.WAREHOUSE.INVENTORY_API, data);
+      return response?.data;
+    },
+    () => {
+      setShowNotification('Stock updated successfully', 'success');
+      resetForm()
+    },
+    (errors: { rootError: any; store_id: any; product_id: any; quantity: any; pallet: any; }) => {
+      const { rootError, store_id, product_id, quantity, pallet } = errors;
+      setError("store_id", { type: "manual", message: store_id?.message });
+      setError("product_id", { type: "manual", message: product_id?.message });
+      setError("quantity", { type: "manual", message: quantity?.message });
+      setError("pallet", { type: "manual", message: pallet?.message });
+      if (rootError?.message && notificationRef.current) {
+        notificationRef.current.showNotification(rootError?.message, "danger");
+      }
+    }
+  );
 
   const handleSubmit = async (data: z.infer<typeof stockinSchema>) => {
-    mutation.mutate({ product_id: data.product_id, quantity: data.quantity, pallet: data.pallet });
+    mutation.mutate(data);
   };
 
   const resetFormHandler = () => {
     resetForm({
-      quantity: 1,
-      pallet: "PAL" + Math.floor(Math.random() * 1000000),
+      store_id: "",
+      product_id: "",
+      quantity: 0,
+      pallet: "",
     });
   };
 
   useEffect(() => {
-    resetFormHandler();
-  }, [products, resetForm]);
+      const containerInfo = containerInfoData?.find((c: any) => c.container_type === "PALLET");
+      if (containerInfo) {
+        let codeStr = containerInfo?.code;
+        let i = 0;
+        while (i < codeStr.length && isNaN(parseInt(codeStr[i], 10))) {
+          i++;
+        }
+        const prefix = codeStr.substring(0, i);
+        const numericPart = codeStr.substring(i);
+        const incrementedNumericPart = numericPart ? (parseInt(numericPart, 10) + 1).toString().padStart(numericPart.length, '0') : "00001";
+        setValue("pallet", `${prefix}${incrementedNumericPart}`);
+      }
+  }, [containerInfoData, setValue]);
 
   return (
     <>
@@ -66,8 +93,9 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
         <EasyForm methods={methods} onSubmit={handleSubmit} className="space-y-6">
           <Notification ref={notificationRef} type="danger" fixed={false} className='mb-4' />
           <div className="border-b border-gray-900/10 pb-12">
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-10">
-              <Select name="product_id" label="Product" placeholder="Please enter Product" options={products?.data} labelKey='name' valueKey='id' className='sm:col-span-6' selectClassName="rounded-lg" />
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-4">
+              <Select name="store_id" label="Store" placeholder="Please enter Store" options={stores?.data} labelKey='name' valueKey='id' className='sm:col-span-2' selectClassName="rounded-lg" />
+              <Select name="product_id" label="Product" placeholder="Please enter Product" options={products?.data} labelKey='name' valueKey='id' className='sm:col-span-2' selectClassName="rounded-lg" />
               <Input type='number' name="quantity" label="Quantity" placeholder="Please enter quantity" className='sm:col-span-2' />
               <Input name="pallet" label="Pallet Code" placeholder="Please enter pallet code" className='sm:col-span-2' />
             </div>

@@ -30,6 +30,20 @@ export const storeColumns: ColumnDef<any, any>[] = [
     header: "Location",
   },
   {
+    accessorKey: "store_types",
+    enableSorting: false,
+    header: "Can Contains",
+    cell: (row) => {
+      return (
+        <>
+          { row ? row?.getValue()?.map((t: any) => (
+            <div key={t}>{t}</div>
+          )) : null }
+        </>
+      );
+    },
+  },
+  {
     accessorKey: "owner",
     enableSorting: false,
     header: "Owner",

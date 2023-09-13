@@ -41,6 +41,7 @@ import ProductFormPage from '@pages/secure/master/products/productFormPage';
 import ProductDetailPage from '@pages/secure/master/products/productDetailPage';
 import LabelStickerListPage from '@pages/secure/warehouse/labelstickers/labelstickerListPage';
 import LabelStickerDetailPage from '@pages/secure/warehouse/labelstickers/labelstickerDetailPage';
+import StockListPage from '@pages/secure/warehouse/stocks/stockListPage';
 
 
 const router = createBrowserRouter([
@@ -72,7 +73,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to='/auth/login' />,
+        element: <Navigate to='/secure/dashboard' />,
       },
       {
         path: "secure",children: [
@@ -278,23 +279,32 @@ const router = createBrowserRouter([
                   },
                 ]
               },
-              // {
-              //   path: "inventories",
-              //   children: [
-              //     {
-              //       index: true,
-              //       element: <InventoryListPage />,
-              //     },
-              //     {
-              //       path: "stockin-raw-material",
-              //       element: <StockinRawMaterialPage />
-              //     },
-              //     {
-              //       path: "stockin-finished-goods",
-              //       element: <StockinFinishedGoodsPage />
-              //     },
-              //   ]
-              // },
+              {
+                path: "inventories",
+                children: [
+                  {
+                    index: true,
+                    element: <InventoryListPage />,
+                  },
+                  {
+                    path: "stockin-raw-material",
+                    element: <StockinRawMaterialPage />
+                  },
+                  {
+                    path: "stockin-finished-goods",
+                    element: <StockinFinishedGoodsPage />
+                  },
+                  {
+                    path: ":id/stocks",
+                    children: [
+                      {
+                        index: true,
+                        element: <StockListPage />,
+                      },
+                    ]
+                  }
+                ]
+              },
             ]
           },
         ],

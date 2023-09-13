@@ -42,9 +42,13 @@ const MachineFormPage: React.FunctionComponent = () => {
       return response?.data;
     },
     (data) => {
-      if (isEditMode) setShowNotification('Machine updated successfully', 'success');
-      else setShowNotification('Machine created successfully', 'success');
-      if (isEditMode) { navigate(`/secure/master/machines/${id}`) } else { navigate('/secure/master/machines') };
+      if (isEditMode) { 
+        setShowNotification('Machine updated successfully', 'success');
+        navigate(`/secure/master/machines/${id}`)
+      } else {
+        setShowNotification('Machine created successfully', 'success');
+        resetForm();
+      }
     },
     (errors) => {
       const { rootError, code, name, status } = errors;

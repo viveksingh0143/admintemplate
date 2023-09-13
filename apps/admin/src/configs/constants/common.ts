@@ -1,3 +1,19 @@
+const RAW_MATERIAL = "RAW Material";
+const FINISHED_GOODS = "Finished Goods";
+// const SEMI_FINISHED_GOODS = "Semi Finished Goods";
+const GRAM = "Gram";
+const KILOGRAM = "Kilogram";
+const LITER = "Liter";
+const MILLILITER = "Milliliter";
+const PIECE = "Piece";
+// Status
+const ENABLE = 'ENABLE';
+const DISABLE = 'DISABLE';
+// Container
+const PALLET = 'PALLET';
+const BIN = 'BIN';
+const RACK = 'RACK';
+
 export const CommonConstant = {
   LOCAL_STORAGE: {
     MY_TOKENS_KEY: "mytkns"
@@ -11,12 +27,24 @@ export const CommonConstant = {
     { number: "3", start: "01:00:00 AM", end: "09:00:00 AM", time_interval: "3: 01:00 AM - 09:00 AM" },
   ],
   DATE_FORMAT_TEMPLATE: "dd-MM-yyyy hh:mm:ss a",
-  COMMON_STATUSES: <{}[]>[{label: 'ENABLE', value: "ENABLE"},{ label: 'DISABLE', value: "DISABLE"}],
-  COMMON_PRODUCT_TYPES: <string[]>["RAW Material", "Finished Goods"],
-  COMMON_UNITS: <string[]>["Kilogram", "Gram", "Liter", "Milliliter", "Piece"],
-  COMMON_WEIGHT_UNITS: <string[]>["Gram", "Kilogram", "Liter", "Milliliter"],
-  COMMON_CONTAINER_TYPES: <string[]>['PALLET', 'BIN', 'RACK'],
-  PO_CATEGORIES: <{label: string, value: string}[]>[{label: 'Production', value: 'PRODUCTION'}, {label: 'Trails', value: 'TRAILS'}, {label: 'NPD', value: 'NPD'}, {label: 'Samples', value: 'SAMPLES'}],
-  UNIT_TYPES: <{label: string, value: string}[]>[{label: 'Grams', value: 'GMs'}, {label: 'Kilogram', value: 'KGs'}],
+  COMMON_STATUSES: <{}[]>[{label: ENABLE, value: ENABLE},{ label: DISABLE, value: DISABLE}],
+  PO_CATEGORIES: <{label: string, value: string}[]>[
+    {label: 'Production', value: 'PRODUCTION'},
+    {label: 'Trails', value: 'TRAILS'},
+    {label: 'NPD', value: 'NPD'},
+    {label: 'Samples', value: 'SAMPLES'}
+  ],
+  UNIT: {
+    COMMON: <string[]>[KILOGRAM, GRAM, LITER, MILLILITER, PIECE],
+    WEIGHT: <string[]>[GRAM, KILOGRAM, LITER, MILLILITER],
+  },
+  CONTAINER: {
+    TYPES: <string[]>[PALLET, BIN, RACK],
+  },
+  PRODUCT: {
+    RAW_MATERIAL: RAW_MATERIAL,
+    FINISHED_GOODS: FINISHED_GOODS,
+    TYPES: <string[]>[RAW_MATERIAL, FINISHED_GOODS],
+  }
 } as const;
 

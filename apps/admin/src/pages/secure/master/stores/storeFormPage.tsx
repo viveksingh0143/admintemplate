@@ -17,6 +17,7 @@ const storeSchema = z.object({
   name: z.string().nonempty("Name is required"),
   location: z.string(),
   status: z.string(),
+  store_types: z.array(z.string()),
   owner: z.object({
     id: z.union([z.number(), z.string().transform(Number)])
   })
@@ -104,8 +105,9 @@ const StoreFormPage: React.FunctionComponent = () => {
               <Input name="code" label="Code" placeholder="Please enter code" className='sm:col-span-3' />
               <Input name="name" label="Name" placeholder="Please enter name" className='sm:col-span-3' />
               <Input name="location" label="Location" placeholder="Please enter location" className='sm:col-span-3' />
+              <Select multiple name="store_types" label="Store Types" placeholder="Please select types" options={CommonConstant.COMMON_PRODUCT_TYPES} className='sm:col-span-3' selectClassName="rounded-lg" />
               <Select name="status" label="Status" placeholder="Please enter status" options={CommonConstant.COMMON_STATUSES} className='sm:col-span-3' />
-              <Select name="owner.id" label="Store Owner" placeholder="Please select user" options={owners?.data} labelKey='name' valueKey='id' className='sm:col-span-6' selectClassName="rounded-lg" />
+              <Select name="owner.id" label="Store Owner" placeholder="Please select user" options={owners?.data} labelKey='name' valueKey='id' className='sm:col-span-3' selectClassName="rounded-lg" />
             </div>
           </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">

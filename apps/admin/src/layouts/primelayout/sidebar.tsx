@@ -17,6 +17,9 @@ const topSidebarNavs = [
 
   { name: 'Batch Labels', href: '/secure/warehouse/batchlabels', icon: BuildingStorefrontIcon },
   { name: 'Inventory', href: '/secure/warehouse/inventories', icon: Square3Stack3DIcon },
+
+  { name: 'RM Requition', href: '/secure/warehouse/raw-material-request', icon: Square3Stack3DIcon },
+  { name: 'Outward Requition', href: '/secure/warehouse/outward-request', icon: Square3Stack3DIcon },
   // { name: 'Calendar', href: '/secure/calendar', icon: CalendarIcon },
   // { name: 'Reports', href: '/secure/reports', icon: ChartPieIcon },
 ];

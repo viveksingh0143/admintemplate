@@ -6,7 +6,6 @@ import { CommonConstant } from "@configs/constants/common";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@components/ui";
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
-import { useCustomerList } from "@hooks/customers/customersHooks";
 import { customerColumns } from "./customersDef";
 import { useNotification } from "@hooks/notificationContext";
 import { useAxiosMutation, useAxiosQueryWithParams } from "@hooks/common/useCommonAxiosActions";

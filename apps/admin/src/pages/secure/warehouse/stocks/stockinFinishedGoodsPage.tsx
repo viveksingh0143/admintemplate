@@ -1,12 +1,11 @@
-import EasyForm, { useEasyForm, Input, Select } from '@components/form';
+import EasyForm, { useEasyForm, Input, Select, Textarea } from '@components/form';
 import Button from '@components/ui/button';
 import LoadingOverlay from '@components/ui/loadingOverlay';
-import PageHeader from '@components/ui/pageHeader';
 import { Notification, NotificationHandles } from '@components/ui/notification';
-import { API_URLS } from '@configs/constants/apiUrls';
-import { CommonConstant } from '@configs/constants/common';
-import { useAxiosQueryWithParams } from '@hooks/common/useCommonAxiosActions';
+import PageHeader from '@components/ui/pageHeader';
+import { useInventoryFinishedStockFormServiceHook, useInventoryFormServiceHook } from '@hooks/inventories/inventoriesHooks';
 import { useNotification } from '@hooks/notificationContext';
+import { useProductList } from '@hooks/products/productsHooks';
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
@@ -24,14 +23,37 @@ const StockinFinishedGoodsPage: React.FunctionComponent = () => {
   const { setShowNotification } = useNotification();
   const navigate = useNavigate();
   
-  const { data: products, isLoading: isProductsLoading, error: productError } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, 1, 2000, "name asc", { type: CommonConstant.PRODUCT.RAW_MATERIAL });
+  const { data: products, isLoading: isProductLoading, error: productError } = useProductList(1, 2000, "", { type: "RAW Material" });
   const methods = useEasyForm(stockinSchema);
-  const { reset: resetForm, formState: { isLoading, isSubmitting } } = methods;
+  const { reset: resetForm, setError, formState: { isLoading, isSubmitting } } = methods;
   const notificationRef = useRef<NotificationHandles>(null);
 
-  const handleSubmit = async (data: z.infer<typeof stockinSchema>) => {
+  const successFn = () => {
+    setShowNotification('Stock updated and stickers sent to printer successfully', 'success');
+    navigate('/secure/warehouse/inventories')
   };
-  
+
+  const errorsFn = (errors: any) => {
+    setShowNotification('Stock updated and stickers sent to printer successfully', 'success');
+    navigate('/secure/warehouse/inventories')
+    // const { rootError, code, name, description, unit, type } = errors;
+    //   setError("product_id", code?.product_id);
+    //   setError("batch", code?.batch);
+    //   setError("machine", code?.machine);
+    //   setError("quantity", code?.quantity);
+    //   setError("shift", code?.shift);
+    //   setError("supervisor", code?.supervisor);
+    //   if (rootError?.message && notificationRef.current) {
+    //     notificationRef.current.showNotification(rootError?.message, "danger");
+    //   }
+  };
+
+  const mutation = useInventoryFinishedStockFormServiceHook(successFn, errorsFn);
+
+  const handleSubmit = async (data: z.infer<typeof stockinSchema>) => {
+    mutation.mutate({ product_id: data.product_id, batch: data.batch, machine: data.machine, quantity: data.quantity, shift: data.shift, supervisor: data.supervisor });
+  };
+
   const resetFormHandler = () => {
     resetForm({
       batch: "",

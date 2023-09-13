@@ -6,6 +6,7 @@ export interface TabType {
   name: string;
   href?: string;
   icon?: ReactNode;
+  data?: any | null | undefined;
 }
 
 interface TabGroupProps {

@@ -40,18 +40,18 @@ const getRootErrorMessage = (error: ErrorResponse, httpStatusCode: number | unde
 };
 
 
-export const useAxiosQueryWithParams = ( REST_API_URL: string, page: number, pageSize: number, sort: string, filter: any, configs: any = {} ) => {
+export const useAxiosQueryWithParams = ( REST_API_URL: string, page: number, pageSize: number, sort: string, filter: any, shouldFetch: boolean = true, configs: any = {} ) => {
   return useQuery([REST_API_URL, page, pageSize, sort, filter], async () => {
     const API_URL = AxiosService.getInstance().getUrlWithParams(REST_API_URL, { page, pageSize, sort, ...filter });
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);
     return response.data;
   }, {
     cacheTime: 0,
+    enabled: shouldFetch,
     retry: 0,
     ...configs
   });
 };
-
 
 export const useAxiosQuery = ( REST_API_URL: string, configs: any = {} ) => {
   return useQuery([REST_API_URL], async () => {

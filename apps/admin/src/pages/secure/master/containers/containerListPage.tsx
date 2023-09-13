@@ -14,7 +14,7 @@ import { API_URLS } from "@configs/constants/apiUrls";
 import AxiosService from "@services/axiosService";
 import TabGroup, { TabType } from "@components/ui/tabs";
 
-const tabs: TabType[] = CommonConstant.COMMON_CONTAINER_TYPES.map(t => ({ name: t }));
+const tabs: TabType[] = CommonConstant.CONTAINER.TYPES.map(t => ({ name: t }));
 
 const ContainerListPage: React.FC = () => {
   const { setShowNotification } = useNotification();

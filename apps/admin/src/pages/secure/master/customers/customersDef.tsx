@@ -33,23 +33,13 @@ export const customerColumns: ColumnDef<any, any>[] = [
     accessorKey: "billing_address",
     enableSorting: false,
     header: "Billing Address",
-    cell: (row: any) => {
-      if (row?.getValue()?.state === "" && row?.getValue()?.country === "") return "NA";
-      else return (
-        <Chip className="text-xs py-2 px-4" label={`${row?.getValue()?.state?.toUpperCase()} ${row?.getValue()?.country?.toUpperCase()}`} variant={row.getValue() === "active" ? "success" : "warning"} />
-      );
-    },
+    cell: (row: any) => `${row?.getValue()?.state} ${row?.getValue()?.country}`
   },
   {
     accessorKey: "shipping_address",
     enableSorting: false,
     header: "Shipping Address",
-    cell: (row: any) => {
-      if (row?.getValue()?.state === "" && row?.getValue()?.country === "") return "NA";
-      else return (
-        <Chip className="text-xs py-2 px-4" label={`${row?.getValue()?.state?.toUpperCase()} ${row?.getValue()?.country?.toUpperCase()}`} variant={row.getValue() === "active" ? "success" : "warning"} />
-      );
-    },
+    cell: (row: any) => `${row?.getValue()?.state} ${row?.getValue()?.country}`
   },
   {
     accessorKey: "status",

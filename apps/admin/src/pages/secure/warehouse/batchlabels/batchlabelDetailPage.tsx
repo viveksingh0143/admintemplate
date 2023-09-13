@@ -2,12 +2,13 @@ import PageHeader from "@components/ui/pageHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { Chip } from "@components/ui";
-import { useBatchDetail } from "@hooks/warehouse/batches/batchesHooks";
+import { useAxiosQuery } from "@hooks/common/useCommonAxiosActions";
+import { API_URLS } from "@configs/constants/apiUrls";
 
 const BatchDetailPage: React.FC = () => {
   const navigate = useNavigate();
   let { id } = useParams();
-  const { data: pageData, isLoading, error } = useBatchDetail(id);
+  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.WAREHOUSE.BATCH_LABEL_API}/${id}`);
 
   return (
     <>
