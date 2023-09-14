@@ -1,23 +1,23 @@
 import PageHeader from "@components/ui/pageHeader";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProductDetail } from "@hooks/products/productsHooks";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { Chip } from "@components/ui";
 import { format } from "date-fns";
+import { useAxiosQuery } from "@hooks/common/useCommonAxiosActions";
+import { API_URLS } from "@configs/constants/apiUrls";
 
-const ProductDetailPage: React.FC = () => {
+const StockDetailPage: React.FC = () => {
   const navigate = useNavigate();
   let { id } = useParams();
-  const { data: pageData, isLoading, error } = useProductDetail(id);
+  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.WAREHOUSE.STOCK_API}/${id}`);
 
   return (
     <>
       <PageHeader
-        label={`Product Detail - ${pageData?.name}`}
-        breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
+        label="Stock Detail"
+        breadcrumbs={[{ label: "Dashboard" }, { label: "Stocks" }]}
         actions={[
-          { label: "Edit Product", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products/" + id + "/edit") },
-          { label: "List Products", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products") }
+          { label: "List Stocks", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate(`/secure/warehouse/inventories/${pageData?.product_id}/stocks`) }
         ]}
         className="px-4"
       />
@@ -25,80 +25,87 @@ const ProductDetailPage: React.FC = () => {
         <div className="border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Type</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.type }</dd>
+              <dt className="text-sm font-medium text-gray-900">Product Information</dt>
+              <dd className="text-sm leading-6 text-gray-700 sm:col-span-2">
+                <div className="sm:grid sm:grid-cols-10 sm:gap-4">
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 font-semibold">Name</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.product?.name}</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 font-semibold">Code</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.product?.code}</div>
+
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 font-semibold">Product Type</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.product?.product_type}</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 font-semibold">Unit</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.product?.unit_type}</div>
+                  {pageData?.product?.unit_type === "Piece" && (
+                    <>
+                      <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 font-semibold">Unit Weight</div>
+                      <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.product?.unit_weight} {pageData?.product?.unit_weight_type}</div>
+                    </>
+                  )}
+                </div>
+              </dd>
+            </div>
+
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-900">Store Information</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <div className="sm:grid sm:grid-cols-10 sm:gap-4">
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2  font-semibold">Name</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.store?.name}</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2  font-semibold">Code</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.store?.code}</div>
+
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2  font-semibold">Store Type</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.store?.store_types}</div>
+                </div>
+              </dd>
+            </div>
+
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-900">Barcode</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.barcode}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Code</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.code }</dd>
+              <dt className="text-sm font-medium text-gray-900">Batch No.</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.batch_no}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Name</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.name }</dd>
+              <dt className="text-sm font-medium text-gray-900">Unit Weight</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.unit_weight}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Description</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.description }</dd>
+              <dt className="text-sm font-medium text-gray-900">Quantity</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.quantity}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Unit</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.unit }</dd>
+              <dt className="text-sm font-medium text-gray-900">Machine Code</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.machine_code}</dd>
+            </div>
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-900">Stockin At</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.stockin_at}</dd>
+            </div>
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-900">Stockout At</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.stockout_at}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Status</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                <Chip className="text-xs py-2 px-4" label={pageData?.status?.toUpperCase()} variant={pageData?.status === "active" ? "success" : "warning"} />
-              </dd>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.status}</dd>
+            </div>
+
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-900">Pallet</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.pallet?.code || "Not Attached"}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Meta Information</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.description }</dd>
+              <dt className="text-sm font-medium text-gray-900">Bin</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.bin?.code || "Not Attached"}</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium leading-6 text-gray-900">Meta Information</dt>
-              <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
-                  <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                    <div className="flex w-0 flex-1 items-center">
-                      <ClockIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                      <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                        <span className="truncate font-medium">Created At</span>
-                      </div>
-                    </div>
-                    <div className="ml-4 flex-shrink-0">
-                      <div className="font-medium text-primary-600 hover:text-primary-500">
-                        { pageData?.created_at ? format(new Date(pageData?.created_at), 'yyyy-MM-dd hh::mm:ss a') : null }
-                      </div>
-                    </div>
-                  </li>
-                  <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                    <div className="flex w-0 flex-1 items-center">
-                      <ClockIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                      <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                        <span className="truncate font-medium">Updated At</span>
-                      </div>
-                    </div>
-                    <div className="ml-4 flex-shrink-0">
-                      <div className="font-medium text-primary-600 hover:text-primary-500">
-                        { pageData?.updated_at ? format(new Date(pageData?.updated_at), 'yyyy-MM-dd hh::mm:ss a') : null }
-                      </div>
-                    </div>
-                  </li>
-                  <li className="flex items-center justify-between py-4 pl-4 pr-5 text-sm leading-6">
-                    <div className="flex w-0 flex-1 items-center">
-                      <ClockIcon className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                      <div className="ml-4 flex min-w-0 flex-1 gap-2">
-                        <span className="truncate font-medium">Last Modified By</span>
-                      </div>
-                    </div>
-                    <div className="ml-4 flex-shrink-0">
-                      <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                        { pageData?.last_updated_by || "Not Available"  }
-                      </a>
-                    </div>
-                  </li>
-                </ul>
-              </dd>
+              <dt className="text-sm font-medium text-gray-900">Rack</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{pageData?.rack?.code || "Not Attached"}</dd>
             </div>
           </dl>
         </div>
@@ -107,4 +114,4 @@ const ProductDetailPage: React.FC = () => {
   )
 };
 
-export default ProductDetailPage;
+export default StockDetailPage;

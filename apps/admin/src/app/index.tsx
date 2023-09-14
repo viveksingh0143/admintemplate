@@ -42,6 +42,15 @@ import ProductDetailPage from '@pages/secure/master/products/productDetailPage';
 import LabelStickerListPage from '@pages/secure/warehouse/labelstickers/labelstickerListPage';
 import LabelStickerDetailPage from '@pages/secure/warehouse/labelstickers/labelstickerDetailPage';
 import StockListPage from '@pages/secure/warehouse/stocks/stockListPage';
+import StockDetailPage from '@pages/secure/warehouse/stocks/stockDetailPage';
+import JobOrderListPage from '@pages/secure/master/joborder/joborderListPage';
+import JobOrderFormPage from '@pages/secure/master/joborder/joborderFormPage';
+import JobOrderDetailPage from '@pages/secure/master/joborder/joborderDetailPage';
+import RequisitionListPage from '@pages/secure/master/requisition/requisitionListPage';
+import RequisitionFormPage from '@pages/secure/master/requisition/requisitionFormPage';
+import RequisitionDetailPage from '@pages/secure/master/requisition/requisitionDetailPage';
+import OutwardRequestFormPage from '@pages/secure/master/outwardrequests/outwardFormPage';
+import OutwardRequestListPage from '@pages/secure/master/outwardrequests/outwardListPage';
 
 
 const router = createBrowserRouter([
@@ -239,6 +248,69 @@ const router = createBrowserRouter([
                     element: <CustomerFormPage />
                   }
                 ]
+              },
+              {
+                path: "joborders",
+                children: [
+                  {
+                    index: true,
+                    element: <JobOrderListPage />,
+                  },
+                  {
+                    path: "create",
+                    element: <JobOrderFormPage />
+                  },
+                  {
+                    path: ":id",
+                    element: <JobOrderDetailPage />
+                  },
+                  {
+                    path: ":id/edit",
+                    element: <JobOrderFormPage />
+                  }
+                ]
+              },
+              {
+                path: "requisitions",
+                children: [
+                  {
+                    index: true,
+                    element: <RequisitionListPage />,
+                  },
+                  {
+                    path: "create",
+                    element: <RequisitionFormPage />
+                  },
+                  {
+                    path: ":id",
+                    element: <RequisitionDetailPage />
+                  },
+                  {
+                    path: ":id/edit",
+                    element: <RequisitionFormPage />
+                  }
+                ]
+              },
+              {
+                path: "outwardrequests",
+                children: [
+                  {
+                    index: true,
+                    element: <OutwardRequestListPage />,
+                  },
+                  {
+                    path: "create",
+                    element: <OutwardRequestFormPage />
+                  },
+                  {
+                    path: ":id",
+                    element: <RequisitionDetailPage />
+                  },
+                  {
+                    path: ":id/edit",
+                    element: <OutwardRequestFormPage />
+                  }
+                ]
               }
             ]
           },
@@ -295,11 +367,15 @@ const router = createBrowserRouter([
                     element: <StockinFinishedGoodsPage />
                   },
                   {
-                    path: ":id/stocks",
+                    path: ":productid/stocks",
                     children: [
                       {
                         index: true,
                         element: <StockListPage />,
+                      },
+                      {
+                        path: ":id",
+                        element: <StockDetailPage />
                       },
                     ]
                   }

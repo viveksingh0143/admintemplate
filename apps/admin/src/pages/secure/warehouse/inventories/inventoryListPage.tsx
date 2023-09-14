@@ -20,8 +20,8 @@ const InventoryListPage: React.FC = () => {
   const [sortingOrder, setSortingOrder] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(CommonConstant.PAGE_INFO.PAGE_SIZE);
-  const { data: storeData, isLoading: isStoreLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 100, "", { status: "ENABLE" });
-  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.WAREHOUSE.INVENTORY_API, pageNumber, rowsPerPage, sortingOrder, requestQueryParams, {}, currentTab != null);
+  const { data: storeData, isLoading: isStoreLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 100, "", { status: 1 });
+  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.WAREHOUSE.INVENTORY_API, pageNumber, rowsPerPage, sortingOrder, requestQueryParams, currentTab != null);
 
   const handleTabClick = (selectedTab: TabType) => {
     const tabParams = selectedTab.data || {}

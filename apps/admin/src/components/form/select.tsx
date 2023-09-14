@@ -3,12 +3,12 @@ import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { classNames } from '@lib/utils';
 
-type SelectProps<T extends { [K in LabelKey | ValueKey]: string }, LabelKey extends keyof T = keyof T, ValueKey extends keyof T = keyof T> = {
+type SelectProps<T extends Record<string, string> = {}> = {
   name: string;
   label: string;
   options: T[] | string[];
-  labelKey?: LabelKey;
-  valueKey?: ValueKey;
+  labelKey?: keyof T;
+  valueKey?: keyof T;
   required?: boolean;
   className?: string;
   labelClassName?: string;
@@ -17,12 +17,12 @@ type SelectProps<T extends { [K in LabelKey | ValueKey]: string }, LabelKey exte
   hideLabel?: boolean;
 } & React.ComponentProps<'select'>;
 
-const Select = <T extends { [K in LabelKey | ValueKey]: string }, LabelKey extends keyof T = keyof T, ValueKey extends keyof T = keyof T>({
+const Select = <T extends Record<string, string> = {}>({
   name,
   label,
   options,
-  labelKey = 'label' as LabelKey,
-  valueKey = 'value' as ValueKey,
+  labelKey = 'label',
+  valueKey = 'value',
   required,
   className = '',
   labelClassName = '',
@@ -30,7 +30,7 @@ const Select = <T extends { [K in LabelKey | ValueKey]: string }, LabelKey exten
   errorClassName = '',
   hideLabel = false,
   ...props
-}: SelectProps<T, LabelKey, ValueKey>) => {
+}: SelectProps<T>) => {
   const { register, formState: { errors } } = useFormContext();
 
   return (
@@ -50,9 +50,9 @@ const Select = <T extends { [K in LabelKey | ValueKey]: string }, LabelKey exten
           options.map((option, index) => (
             <option
               key={index}
-              value={typeof option === 'string' ? option : (option[valueKey as keyof typeof option])}
+              value={typeof option === 'string' ? option : option[valueKey]}
             >
-              {typeof option === 'string' ? option : (option[labelKey as keyof typeof option])}
+              {typeof option === 'string' ? option : option[labelKey]}
             </option>
           ))}
       </select>

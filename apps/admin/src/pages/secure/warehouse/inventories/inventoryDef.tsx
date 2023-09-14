@@ -63,7 +63,7 @@ export const inventoryColumns: ColumnDef<any, any>[] = [
     cell: (props) => props?.getValue() || 0,
   },
   {
-    accessorKey: "last_stock_in",
+    accessorKey: "stockin_at",
     enableSorting: true,
     header: "Last Stockin At",
     cell: (props) => props?.getValue() || "NA",

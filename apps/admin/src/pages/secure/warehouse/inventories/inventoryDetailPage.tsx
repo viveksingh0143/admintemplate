@@ -1,15 +1,15 @@
 import PageHeader from "@components/ui/pageHeader";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProductDetail } from "@hooks/products/productsHooks";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { Chip } from "@components/ui";
 import { format } from "date-fns";
+import { API_URLS } from "@configs/constants/apiUrls";
+import { useAxiosQuery } from "@hooks/common/useCommonAxiosActions";
 
 const ProductDetailPage: React.FC = () => {
   const navigate = useNavigate();
   let { id } = useParams();
-  const { data: pageData, isLoading, error } = useProductDetail(id);
-
+  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.MASTER.PRODUCT_API}/${id}`);
   return (
     <>
       <PageHeader

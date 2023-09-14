@@ -41,6 +41,8 @@ const getRootErrorMessage = (error: ErrorResponse, httpStatusCode: number | unde
 
 
 export const useAxiosQueryWithParams = ( REST_API_URL: string, page: number, pageSize: number, sort: string, filter: any, shouldFetch: boolean = true, configs: any = {} ) => {
+  // console.log(REST_API_URL)
+  // console.log(shouldFetch);
   return useQuery([REST_API_URL, page, pageSize, sort, filter], async () => {
     const API_URL = AxiosService.getInstance().getUrlWithParams(REST_API_URL, { page, pageSize, sort, ...filter });
     const response = await AxiosService.getInstance().axiosInstance.get(API_URL);

@@ -4,6 +4,7 @@ import LoadingOverlay from '@components/ui/loadingOverlay';
 import { Notification, NotificationHandles } from '@components/ui/notification';
 import PageHeader from '@components/ui/pageHeader';
 import { API_URLS } from '@configs/constants/apiUrls';
+import { CommonConstant } from '@configs/constants/common';
 import { useAxiosMutation, useAxiosQuery, useAxiosQueryWithParams } from '@hooks/common/useCommonAxiosActions';
 import { useNotification } from '@hooks/notificationContext';
 import AxiosService from '@services/axiosService';
@@ -12,10 +13,11 @@ import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 const stockinSchema = z.object({
-  store_id: z.string().nonempty("Store is required"),
-  product_id: z.string().nonempty("Product is required"),
+  store_id: z.union([z.number(), z.string().transform(Number)]),
+  product_id: z.union([z.number(), z.string().transform(Number)]),
   quantity: z.number().nonnegative("Quantity is required"),
   pallet: z.string().nonempty("Pallet is required"),
+  create_pallet: z.boolean().default(true)
 });
 
 const StockinRawMaterialPage: React.FunctionComponent = () => {
@@ -23,8 +25,8 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
   const navigate = useNavigate();
 
   const { data: containerInfoData, isLoading: isContainerInfoDataLoading, error: containerInfoDataError } = useAxiosQuery(`${API_URLS.MASTER.CONTAINER_API}/container-code-info`);
-  const { data: products, isLoading: isProductsLoading, error: productError } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, 1, 2000, "name asc", {}, isContainerInfoDataLoading);
-  const { data: stores, isLoading: isStoreLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 2000, "name asc", {}, isContainerInfoDataLoading);
+  const { data: products, isLoading: isProductsLoading, error: productError } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, 1, 2000, "name asc", { product_type: CommonConstant.PRODUCT.RAW_MATERIAL }, isContainerInfoDataLoading);
+  const { data: stores, isLoading: isStoreLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 2000, "name asc", { store_type: CommonConstant.PRODUCT.RAW_MATERIAL }, isContainerInfoDataLoading);
   
   const methods = useEasyForm(stockinSchema);
   const { reset: resetForm, setValue, setError, formState: { errors, isLoading, isSubmitting } } = methods;
@@ -32,7 +34,7 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
 
   const mutation = useAxiosMutation(
     async (data: any) => {
-      let response = await AxiosService.getInstance().axiosInstance.post(API_URLS.WAREHOUSE.INVENTORY_API, data);
+      let response = await AxiosService.getInstance().axiosInstance.post(`${API_URLS.WAREHOUSE.INVENTORY_API}/raw-material`, data);
       return response?.data;
     },
     () => {
@@ -57,12 +59,21 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
 
   const resetFormHandler = () => {
     resetForm({
-      store_id: "",
-      product_id: "",
+      store_id: 0,
+      product_id: 0,
       quantity: 0,
       pallet: "",
     });
-  };
+  }
+
+  useEffect(() =>{
+    if (products?.data) {
+      setValue("product_id", products?.data?.[0]?.id)
+    }
+    if (stores?.data) {
+      setValue("store_id", stores?.data?.[0]?.id)
+    }
+  }, [products, stores])
 
   useEffect(() => {
       const containerInfo = containerInfoData?.find((c: any) => c.container_type === "PALLET");

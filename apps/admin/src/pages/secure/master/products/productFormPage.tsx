@@ -83,9 +83,9 @@ const ProductFormPage: React.FunctionComponent = () => {
       link_code: "",
       name: "",
       description: "",
-      unit_type: CommonConstant.COMMON_UNITS[0],
+      unit_type: CommonConstant.UNIT.COMMON[0],
       unit_weight: 0,
-      unit_weight_type: CommonConstant.COMMON_WEIGHT_UNITS[0],
+      unit_weight_type: CommonConstant.UNIT.WEIGHT[0],
       status: "ENABLE",
     };
     if (isEditMode && formData) {
@@ -114,12 +114,12 @@ const ProductFormPage: React.FunctionComponent = () => {
           <Notification ref={notificationRef} type="danger" fixed={false} className='mb-4' />
           <div className="border-b border-gray-900/10 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-3">
-              <Select name="product_type" label="Product Type" placeholder="Please enter type" options={CommonConstant.COMMON_PRODUCT_TYPES} className='sm:col-span-1' selectClassName="rounded-lg" />
+              <Select name="product_type" label="Product Type" placeholder="Please enter type" options={CommonConstant.PRODUCT.TYPES} className='sm:col-span-1' selectClassName="rounded-lg" />
               <Input name="code" label="Code" placeholder="Please enter code" className='sm:col-span-1' />
               <Input name="name" label="Name" placeholder="Please enter name" className='sm:col-span-1' />
-              <Select name="unit_type" label="Unit Type" placeholder="Please enter unit type" options={CommonConstant.COMMON_UNITS} className='sm:col-span-1' />
+              <Select name="unit_type" label="Unit Type" placeholder="Please enter unit type" options={CommonConstant.UNIT.COMMON} className='sm:col-span-1' />
               {unitType === "Piece" && (<div className='mb-4 sm:col-span-1'>
-                <label htmlFor="unit_weight" className="block text-sm font-medium text-gray-500">
+                <label htmlFor="unit_weight" className="block text-sm font-medium text-grayCommonConstant.UNIT.WEIGHT">
                   Unit Weight
                 </label>
                 <div className="flex rounded-md shadow-sm">

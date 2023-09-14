@@ -2,28 +2,26 @@ import PageHeader from "@components/ui/pageHeader";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicTable from "@components/ui/basicTable";
-import { productColumns } from "./productsDef";
-import TabGroup, { TabType } from "@components/ui/tabs";
 import { CommonConstant } from "@configs/constants/common";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@components/ui";
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
+import { ButtonProps } from "@components/ui/button";
 import { useNotification } from "@hooks/notificationContext";
 import { useAxiosMutation, useAxiosQueryWithParams } from "@hooks/common/useCommonAxiosActions";
 import { API_URLS } from "@configs/constants/apiUrls";
 import AxiosService from "@services/axiosService";
-import { ButtonProps } from "@components/ui/button";
+import TabGroup, { TabType } from "@components/ui/tabs";
+import { joborderColumns } from "./jobordersDef";
 
-const ProductListPage: React.FC = () => {
-  const tabs: TabType[] = CommonConstant.PRODUCT.TYPES.map((pType: string) => ({ name: pType }));
+const JobOrderListPage: React.FC = () => {
   const { setShowNotification } = useNotification();
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState(tabs[0]);
   const [rowSelection, setRowSelection] = useState<any[]>([]);
   const [sortingOrder, setSortingOrder] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(CommonConstant.PAGE_INFO.PAGE_SIZE);
-  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, pageNumber, rowsPerPage, sortingOrder, { product_type: currentTab.name });
+  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.MASTER.JOB_ORDER_API, pageNumber, rowsPerPage, sortingOrder, { });
 
   const isRowsSelected = rowSelection.length;
 
@@ -31,9 +29,9 @@ const ProductListPage: React.FC = () => {
     async (data: any) => {
       let response = null
       if (Array.isArray(data)) {
-        response = await AxiosService.getInstance().axiosInstance.post(`${API_URLS.MASTER.PRODUCT_API}/bulkdelete`, { ids: data });
+        response = await AxiosService.getInstance().axiosInstance.post(`${API_URLS.MASTER.JOB_ORDER_API}/bulkdelete`, { ids: data });
       } else {
-        response = await AxiosService.getInstance().axiosInstance.delete(`${API_URLS.MASTER.PRODUCT_API}/${data}`);
+        response = await AxiosService.getInstance().axiosInstance.delete(`${API_URLS.MASTER.JOB_ORDER_API}/${data}`);
       }
       return response?.data;
     },
@@ -42,20 +40,16 @@ const ProductListPage: React.FC = () => {
   );
 
   const deleteAllSelected = (selectedRows: any[]) => {
-    const productIds = selectedRows.map(row => row.id);
-    if (window.confirm(`Are you sure you want to delete ${productIds.length} products?`)) {
-      deleteMutation.mutate(productIds);
+    const containerIds = selectedRows.map(row => row.id);
+    if (window.confirm(`Are you sure you want to delete ${containerIds.length} job orders?`)) {
+      deleteMutation.mutate(containerIds);
     }
   };
 
   const deleteSelected = (selectedRow: any) => {
-    if (window.confirm(`Are you sure you want to delete ${selectedRow.name} product?`)) {
+    if (window.confirm(`Are you sure you want to delete ${selectedRow.name} job order?`)) {
       deleteMutation.mutate(selectedRow.id);
     }
-  };
-
-  const handleTabClick = (selectedTab: TabType) => {
-    setCurrentTab(selectedTab);
   };
 
   const actionsColumn: ColumnDef<any> = {
@@ -64,8 +58,8 @@ const ProductListPage: React.FC = () => {
     header: "Actions",
     cell: ({ row }) => (
       <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
-        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/products/${row.original.id}`)} />
-        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/products/${row.original.id}/edit`)} />
+        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/joborders/${row.original.id}`)} />
+        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/joborders/${row.original.id}/edit`)} />
         <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => deleteSelected(row.original)} />
       </span>
     ),
@@ -86,21 +80,22 @@ const ProductListPage: React.FC = () => {
     setPageNumber(pageNumber);
     setSortingOrder(sortingOrder);
   };
-
+  
   return (
     <>
       <PageHeader
-        label="Products"
-        breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
-        actions={[{ label: "Create Product", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products/create") }]}
+        label="Job Orders"
+        breadcrumbs={[{ label: "Dashboard" }, { label: "JobOrders" }]}
+        actions={[
+          { label: "Create JobOrder", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/create") },
+          ...memoizedActionsOnSelection
+        ]}
         className="px-4"
-      >
-        <TabGroup tabs={tabs} currentTab={currentTab} onTabClick={handleTabClick} label="Select a tab" />
-      </PageHeader>
+      />
       <div className="p-4 shadow-xl rounded-lg">
         <BasicTable
           data={pageData ? pageData.data : []}
-          columns={[...productColumns, actionsColumn]}
+          columns={[...joborderColumns, actionsColumn]}
           isFetching={isLoading}
           skeletonCount={5}
           rowsPerPage={rowsPerPage}
@@ -114,4 +109,4 @@ const ProductListPage: React.FC = () => {
   )
 };
 
-export default ProductListPage;
+export default JobOrderListPage;
