@@ -124,7 +124,7 @@ const ProductFormPage: React.FunctionComponent = () => {
                 </label>
                 <div className="flex rounded-md shadow-sm">
                   <Input inputClassName='rounded-none rounded-l-md' hideLabel type='number' step="any" name="unit_weight" label="Unit Weight (KG)" placeholder="Please enter unit weight in KG" className='relative flex flex-grow focus-within:z-10' />
-                  <Select selectClassName='rounded-none rounded-r-md min-w-fit' hideLabel name="unit_weight_type" label="Unit Weight Type" placeholder="Please enter unit weight type" options={CommonConstant.COMMON_WEIGHT_UNITS} className='relative inline-flex -ml-px w-28' />
+                  <Select selectClassName='rounded-none rounded-r-md min-w-fit' hideLabel name="unit_weight_type" label="Unit Weight Type" placeholder="Please enter unit weight type" options={CommonConstant.UNIT.COMMON} className='relative inline-flex -ml-px w-28' />
                 </div>
               </div>)}
               <Select name="status" label="Status" placeholder="Please enter status" options={CommonConstant.COMMON_STATUSES} className='sm:col-span-1' />

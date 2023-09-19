@@ -119,7 +119,7 @@ const ContainerFormPage: React.FunctionComponent = () => {
           <Notification ref={notificationRef} type="danger" fixed={false} className='mb-4' />
           <div className="border-b border-gray-900/10 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-12">
-              <Select name="container_type" label="Container Type" placeholder="Please enter container type" options={CommonConstant.COMMON_CONTAINER_TYPES} className='sm:col-span-4' selectClassName="rounded-lg" />
+              <Select name="container_type" label="Container Type" placeholder="Please enter container type" options={CommonConstant.CONTAINER.TYPES} className='sm:col-span-4' selectClassName="rounded-lg" />
               <Input name="code" label="Code" placeholder="Please enter code" className='sm:col-span-4' />
               <Input name="name" label="Name" placeholder="Please enter name" className='sm:col-span-4' />
               {containerType === "RACK" && (

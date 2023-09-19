@@ -87,7 +87,7 @@ const JobOrderListPage: React.FC = () => {
         label="Job Orders"
         breadcrumbs={[{ label: "Dashboard" }, { label: "JobOrders" }]}
         actions={[
-          { label: "Create JobOrder", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/create") },
+          { label: "Create Job Order", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/create") },
           ...memoizedActionsOnSelection
         ]}
         className="px-4"

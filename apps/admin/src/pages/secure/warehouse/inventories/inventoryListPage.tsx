@@ -50,7 +50,7 @@ const InventoryListPage: React.FC = () => {
     if (storeData?.data?.length) {
       const newTabs = storeData?.data?.map((store: any) => ({
         name: store.name,
-        data: { product_types: store.store_types }
+        data: { product_types: store.store_types, store_id: store.id }
       })) || [];
       setTabs(newTabs);
       setCurrentTab(newTabs[0])

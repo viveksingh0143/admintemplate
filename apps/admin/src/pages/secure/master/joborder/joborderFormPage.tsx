@@ -1,8 +1,8 @@
 import EasyForm, { useEasyForm, Input, Select, DateInput } from '@components/form';
 import Button from '@components/ui/button';
 import LoadingOverlay from '@components/ui/loadingOverlay';
-import { Notification, NotificationHandles } from '@components/ui/notification';
 import PageHeader from '@components/ui/pageHeader';
+import { Notification, NotificationHandles } from '@components/ui/notification';
 import { useNotification } from '@hooks/notificationContext';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +12,6 @@ import { useAxiosMutation, useAxiosQuery, useAxiosQueryWithParams } from '@hooks
 import { API_URLS } from '@configs/constants/apiUrls';
 import AxiosService from '@services/axiosService';
 import { useFieldArray, useWatch } from 'react-hook-form';
-import { showZodErrors } from '@lib/utils';
 import ErrorSummary from '@components/ui/errorSummary';
 import { parse } from 'date-fns';
 import { TrashIcon } from '@heroicons/react/24/outline';
@@ -25,8 +24,7 @@ const joborderSchema = z.object({
   order_no: z.string().nonempty("Order number is required"),
   po_category: z.string().nonempty("PO Category is required"),
   customer: z.object({
-    id: z.union([z.number(), z.string().transform(Number)]),
-    name: z.string()
+    id: z.union([z.number(), z.string().transform(Number)])
   }),
   items: z.array(z.object({
     product: z.object({
@@ -89,14 +87,12 @@ const JobOrderFormPage: React.FunctionComponent = () => {
       order_no: "",
       po_category: CommonConstant.PO_CATEGORIES[0].value,
       customer: {
-        id: customers?.data?.[0]?.id,
-        name: customers?.data?.[0]?.name,
+        id: customers?.data?.[0]?.id
       },
       items: [
         {
           product: {
-            id: products?.data?.[0]?.id,
-            name: products?.data?.[0]?.name,
+            id: products?.data?.[0]?.id
           },
           quantity: 1
         }
@@ -120,7 +116,6 @@ const JobOrderFormPage: React.FunctionComponent = () => {
     resetFormHandler();
   }, [formData, isEditMode, customers, products]);
 
-  const customer_id = useWatch({ control: methods.control, name: "customer.id" });
   const items = useWatch({ control: methods.control, name: "items" });
 
   useEffect(() => {
@@ -134,14 +129,6 @@ const JobOrderFormPage: React.FunctionComponent = () => {
     }
   }, [products]);
 
-  useEffect(() => {
-    if (customer_id && customers) {
-      const customer = customers.data.find((tempCustomer: { id: number; }) => tempCustomer.id == customer_id);
-      if (customer) {
-        setValue("customer.name", customer.name);
-      }
-    }
-  }, [customer_id]);
 
   return (
     <>
@@ -175,14 +162,12 @@ const JobOrderFormPage: React.FunctionComponent = () => {
                       <tr>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">S.No.</th>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Product Code</th>
-                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Product Name</th>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Quantity</th>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                     {fields.map((item, index) => {
-                      const product = products?.data.find((p: any) => p.id == item.product.id);
                       return (
                       <tr key={item.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{index + 1}</td>
@@ -190,7 +175,7 @@ const JobOrderFormPage: React.FunctionComponent = () => {
                           <Select name={`items[${index}].product.id`} label="Product Code" placeholder="Please enter Product Code" options={products?.data} labelKey='code' valueKey='id' selectClassName="rounded-lg" />
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Input type='number' name={`items[${index}].quantity`} label="Product Quantity" placeholder="Please enter product name" />
+                          <Input type='number' className='w-32' name={`items[${index}].quantity`} label="Product Quantity" placeholder="Please enter product name" />
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => remove(index)} />

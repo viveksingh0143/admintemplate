@@ -5,19 +5,19 @@ import { Chip } from "@components/ui";
 import { useAxiosQuery } from "@hooks/common/useCommonAxiosActions";
 import { API_URLS } from "@configs/constants/apiUrls";
 
-const RequisitionDetailPage: React.FC = () => {
+const OutwardRequestDetailPage: React.FC = () => {
   const navigate = useNavigate();
   let { id } = useParams();
-  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.MASTER.JOB_ORDER_API}/${id}`);
+  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.MASTER.OUTWARD_REQUEST_API}/${id}`);
 
   return (
     <>
       <PageHeader
-        label={`JobOrder Detail - ${pageData?.order_no}`}
-        breadcrumbs={[{ label: "Dashboard" }, { label: "JobOrders" }]}
+        label={`Outward Request Detail - ${pageData?.order_no}`}
+        breadcrumbs={[{ label: "Dashboard" }, { label: "Outward Requests" }]}
         actions={[
-          { label: "Edit JobOrder", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/" + id + "/edit") },
-          { label: "List JobOrders", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders") }
+          { label: "Edit Outward Request", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/outwardrequests/" + id + "/edit") },
+          { label: "List Outward Requests", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/outwardrequests") }
         ]}
         className="px-4"
       />
@@ -31,10 +31,6 @@ const RequisitionDetailPage: React.FC = () => {
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Issued Date</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.issued_date }</dd>
-            </div>
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">PO Category</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.po_category }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Customer Information</dt>
@@ -148,4 +144,4 @@ const RequisitionDetailPage: React.FC = () => {
   )
 };
 
-export default RequisitionDetailPage;
+export default OutwardRequestDetailPage;

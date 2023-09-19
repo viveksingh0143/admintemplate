@@ -32,6 +32,16 @@ export const containerColumns: ColumnDef<any, any>[] = [
     },
   },
   {
+    accessorKey: "stock_level",
+    enableSorting: true,
+    header: "Stock Level",
+    cell: (row: any) => {
+      return (
+        <Chip className="text-xs py-1 px-2" label={row?.getValue()?.toUpperCase()} variant={row.getValue() === "EMPTY" ? "success" : "warning"} />
+      );
+    },
+  },
+  {
     accessorKey: "status",
     enableSorting: true,
     header: "Status",

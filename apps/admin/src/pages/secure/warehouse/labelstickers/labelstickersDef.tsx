@@ -51,6 +51,16 @@ export const labelstickerColumns: ColumnDef<any, any>[] = [
     },
   },
   {
+    accessorKey: "is_used",
+    enableSorting: true,
+    header: "Used",
+    cell: (row: any) => {
+      return (
+        <Chip className="text-xs py-1 px-2" label={row?.getValue() ? "Yes" : "No"} variant={row.getValue() ? "warning" : "success"} />
+      );
+    },
+  },
+  {
     accessorKey: "last_updated_by",
     header: "Last Modified By",
     enableSorting: true,

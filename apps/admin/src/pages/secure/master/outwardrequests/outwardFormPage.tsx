@@ -23,13 +23,11 @@ const formSchema = z.object({
   }),
   order_no: z.string().nonempty("Request number is required"),
   customer: z.object({
-    id: z.union([z.number(), z.string().transform(Number)]),
-    name: z.string()
+    id: z.union([z.number(), z.string().transform(Number)])
   }),
   items: z.array(z.object({
     product: z.object({
-      id: z.union([z.number(), z.string().transform(Number)]),
-      name: z.string()
+      id: z.union([z.number(), z.string().transform(Number)])
     }),
     quantity: z.number()
   })),
@@ -84,16 +82,16 @@ const OutwardRequestFormPage: React.FunctionComponent = () => {
   };
 
   const resetFormHandler = () => {
-    let preCustomer = customers?.data?.[0];
     let defaultValues = {
       issued_date: new Date(),
       order_no: "",
-      customer: preCustomer,
+      customer: {
+        id: customers?.data?.[0]?.id
+      },
       items: [
         {
           product: {
-            id: products?.data?.[0]?.id,
-            name: products?.data?.[0]?.name,
+            id: products?.data?.[0]?.id
           },
           quantity: 1
         }
@@ -104,7 +102,7 @@ const OutwardRequestFormPage: React.FunctionComponent = () => {
         ...formData,
         issued_date: parse(formData.issued_date, CommonConstant.DATE_FORMAT_TEMPLATE, new Date()),
       };
-      preCustomer = customers.data.find((tempCustomer: { id: number; }) => tempCustomer.id == formData?.customer?.id);
+
       defaultValues = {
         ...defaultValues,
         ...updatedFormData
@@ -119,10 +117,10 @@ const OutwardRequestFormPage: React.FunctionComponent = () => {
 
   return (
     <>
-      <PageHeader label={`${isEditMode ? "Update" : "Create"} OutwardRequest`}
-        breadcrumbs={[{ label: "Dashboard" }, { label: "OutwardRequest" }, { label: `${isEditMode ? "Update" : "Create"} OutwardRequest` }]}
+      <PageHeader label={`${isEditMode ? "Update" : "Create"} Outward Request`}
+        breadcrumbs={[{ label: "Dashboard" }, { label: "Outward Request" }, { label: `${isEditMode ? "Update" : "Create"} Outward Request` }]}
         actions={[
-          { label: "List OutwardRequests", variant: "secondary", onClick: () => navigate("/secure/master/outwardrequests") }
+          { label: "List Outward Requests", variant: "secondary", onClick: () => navigate("/secure/master/outwardrequests") }
         ]}
         className="px-4"
       />
@@ -140,7 +138,7 @@ const OutwardRequestFormPage: React.FunctionComponent = () => {
               <div className="border-t border-gray-900/10 sm:col-span-12">
                 <div className="p-3  bg-gray-300 flex">
                   <span className='flex-grow text-base font-semibold leading-7 text-grey-800'>Order Items</span>
-                  <Button type="button" variant="secondary" label="Add Item" onClick={() => append({ product: { id: products?.data?.[0]?.id, name: products?.data?.[0]?.name }, quantity: 1 })} />
+                  <Button type="button" variant="secondary" label="Add Item" onClick={() => append({ product: { id: products?.data?.[0]?.id }, quantity: 1 })} />
                 </div>
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8 sm:col-span-12">
                   <table className="min-w-full divide-y divide-gray-300">
@@ -163,7 +161,7 @@ const OutwardRequestFormPage: React.FunctionComponent = () => {
                           <Select name={`items[${index}].product.id`} label="Product Code" placeholder="Please enter Product Code" options={products?.data} labelKey='code' valueKey='id' selectClassName="rounded-lg" />
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Input type='number' name={`items[${index}].quantity`} label="Product Quantity" placeholder="Please enter product name" />
+                          <Input type='number' className='w-32' name={`items[${index}].quantity`} label="Product Quantity" placeholder="Please enter product name" />
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => remove(index)} />
@@ -177,7 +175,7 @@ const OutwardRequestFormPage: React.FunctionComponent = () => {
             </div>
           </div>
           <div className="mt-6 flex items-center justify-end gap-x-6">
-            <Button type="submit" loading={isLoading || isSubmitting} loadingText={`${isEditMode ? "Updating" : "Creating"}...`} variant="primary" label={`${isEditMode ? "Update" : "Create"} OutwardRequest`} className="flex w-full justify-center" />
+            <Button type="submit" loading={isLoading || isSubmitting} loadingText={`${isEditMode ? "Updating" : "Creating"}...`} variant="primary" label={`${isEditMode ? "Update" : "Create"} Outward Request`} className="flex w-full justify-center" />
             <Button type="button" variant="secondary" label="Reset" className="flex w-full justify-center" onClick={resetFormHandler} />
           </div>
         </EasyForm>

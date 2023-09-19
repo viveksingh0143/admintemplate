@@ -11,7 +11,7 @@ export const API_URLS = {
     CONTAINER_API: "/master/containers",
     JOB_ORDER_API: "/master/joborders",
     REQUISITION_API: "/master/requisitions",
-    OUTWARD_REQUEST_API: "/master/outward-requests",
+    OUTWARD_REQUEST_API: "/master/outwardrequests",
     
   },
   WAREHOUSE: {

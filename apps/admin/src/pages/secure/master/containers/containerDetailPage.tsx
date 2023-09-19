@@ -37,6 +37,11 @@ const ContainerDetailPage: React.FC = () => {
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.address }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt className="text-sm font-medium text-gray-900">Stock Level</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                <Chip className="text-xs py-1 px-2" label={pageData?.stock_level?.toUpperCase()} variant={pageData?.stock_level === "EMPTY" ? "success" : "warning"} />
+              </dd>
+            </div><div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Status</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                 <Chip className="text-xs py-1 px-2" label={pageData?.status?.toUpperCase()} variant={pageData?.status === "ENABLE" ? "success" : "warning"} />
@@ -44,15 +49,15 @@ const ContainerDetailPage: React.FC = () => {
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Min Capacity</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.min_capacity || "No Limit" }</dd>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.other_info?.min_capacity || "No Limit" }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Max Capacity</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.max_capacity || "No Limit" }</dd>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.other_info?.max_capacity || "No Limit" }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Can Contains</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.can_contains?.map((item: string) => item.replace('_CONTAINABLE', '').toLowerCase().split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')).join(', ') }</dd>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.other_info?.can_contains?.map((item: string) => item.replace('_CONTAINABLE', '').toLowerCase().split('_').map((word: string) => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')).join(', ') }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium leading-6 text-gray-900">Meta Information</dt>

@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 type NotificationContextType = {
   message: string;
   type: CommonVariant;
-  setShowNotification: (message: string, type: CommonVariant) => void;
+  setShowNotification: (message: string, type: CommonVariant) => Promise<void>;
 };
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -22,8 +22,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [type, setType] = useState<CommonVariant>('info');
 
   const setShowNotification = (message: string, type: CommonVariant) => {
-    if (message) setMessage(message);
-    if (type) setType(type);
+    return new Promise<void>((resolve, reject) => {
+      try {
+        if (message) setMessage(message);
+        if (type) setType(type);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   };
 
   return (

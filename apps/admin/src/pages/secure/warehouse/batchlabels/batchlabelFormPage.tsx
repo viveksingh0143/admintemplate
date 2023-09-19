@@ -111,7 +111,7 @@ const BatchFormPage: React.FunctionComponent = () => {
         name: machines?.data?.[0]?.name,
       },
       unit_weight: products?.data?.[0]?.unit_weight,
-      unit_weight_type: (products?.data?.[0]?.unit_weight ? products?.data?.[0]?.unit_weight : CommonConstant.COMMON_WEIGHT_UNITS[0]),
+      unit_weight_type: (products?.data?.[0]?.unit_weight ? products?.data?.[0]?.unit_weight : CommonConstant.UNIT.COMMON[0]),
       package_quantity: 0,
       labels_to_print: 0,
       total_printed: 0,
@@ -211,7 +211,7 @@ const BatchFormPage: React.FunctionComponent = () => {
               <Input name="machine.name" label="Machine Name" placeholder="Please enter machine name" className='sm:col-span-6' disabled={true} />
 
               <Input type='number' step="any" name="unit_weight" label="Unit Weight" placeholder="Please enter unit weight" className='sm:col-span-6' />
-              <Select name="unit_weight_type" label="Unit Weight Type" placeholder="Please select unit weight type" options={CommonConstant.COMMON_WEIGHT_UNITS} className='sm:col-span-6' />
+              <Select name="unit_weight_type" label="Unit Weight Type" placeholder="Please select unit weight type" options={CommonConstant.UNIT.COMMON} className='sm:col-span-6' />
 
               <Input type='number' name="package_quantity" label="Package Quantity" placeholder="Please enter package quantity" className='sm:col-span-6' />
               <Select name="status" label="Status" placeholder="Please enter status" options={CommonConstant.COMMON_STATUSES} className='sm:col-span-6' />

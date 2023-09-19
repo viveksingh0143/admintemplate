@@ -58,7 +58,7 @@ export const inventoryColumns: ColumnDef<any, any>[] = [
   },
   {
     accessorKey: "stock_count",
-    enableSorting: false,
+    enableSorting: true,
     header: "Stock Count",
     cell: (props) => props?.getValue() || 0,
   },

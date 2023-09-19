@@ -29,8 +29,7 @@ const requisitionSchema = z.object({
   }),
   items: z.array(z.object({
     product: z.object({
-      id: z.union([z.number(), z.string().transform(Number)]),
-      name: z.string()
+      id: z.union([z.number(), z.string().transform(Number)])
     }),
     quantity: z.number()
   })),
@@ -108,11 +107,11 @@ const RequisitionFormPage: React.FunctionComponent = () => {
       ]
     };
     if (isEditMode && formData) {
+      preStore = stores?.data?.find((tempStore: { id: number; }) => tempStore.id == formData?.store_id);
       const updatedFormData = {
         ...formData,
         issued_date: parse(formData.issued_date, CommonConstant.DATE_FORMAT_TEMPLATE, new Date()),
       };
-      preStore = stores.data.find((tempStore: { id: number; }) => tempStore.id == formData?.store?.id);
       defaultValues = {
         ...defaultValues,
         ...updatedFormData
@@ -133,8 +132,12 @@ const RequisitionFormPage: React.FunctionComponent = () => {
   }, [products]);
 
   useEffect(() => {
+    console.log(errors);
+  }, [errors])
+
+  useEffect(() => {
     if (store_id && stores) {
-      const store = stores.data.find((tempStore: { id: number; }) => tempStore.id == store_id);
+      const store = stores?.data?.find((tempStore: { id: number; }) => tempStore.id == store_id);
       if (store) {
         setSelectedStore(store)
         setValue("store.name", store.name);
@@ -166,22 +169,20 @@ const RequisitionFormPage: React.FunctionComponent = () => {
               <div className="border-t border-gray-900/10 sm:col-span-12">
                 <div className="p-3  bg-gray-300 flex">
                   <span className='flex-grow text-base font-semibold leading-7 text-grey-800'>Order Items</span>
-                  <Button type="button" variant="secondary" label="Add Item" onClick={() => append({ product: { id: products?.data?.[0]?.id, name: products?.data?.[0]?.name }, quantity: 1 })} />
+                  <Button type="button" variant="secondary" label="Add Item" onClick={() => append({ product: { id: products?.data?.[0]?.id }, quantity: 1 })} />
                 </div>
                 <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8 sm:col-span-12">
                   <table className="min-w-full divide-y divide-gray-300">
                     <thead>
                       <tr>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">S.No.</th>
-                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Product Code</th>
-                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Product Name</th>
+                        <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Product</th>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Quantity</th>
                         <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"></th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                     {fields.map((item, index) => {
-                      const product = products?.data.find((p: any) => p.id == item.product.id);
                       return (
                       <tr key={item.id}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{index + 1}</td>
@@ -189,7 +190,7 @@ const RequisitionFormPage: React.FunctionComponent = () => {
                           <Select name={`items[${index}].product.id`} label="Product Code" placeholder="Please enter Product Code" options={products?.data} labelKey='code' valueKey='id' selectClassName="rounded-lg" />
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <Input type='number' name={`items[${index}].quantity`} label="Product Quantity" placeholder="Please enter product name" />
+                          <Input type='number' className='w-32' name={`items[${index}].quantity`} label="Product Quantity" placeholder="Please enter product name" />
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => remove(index)} />

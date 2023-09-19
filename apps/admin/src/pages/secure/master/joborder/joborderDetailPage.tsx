@@ -13,11 +13,11 @@ const JobOrderDetailPage: React.FC = () => {
   return (
     <>
       <PageHeader
-        label={`JobOrder Detail - ${pageData?.order_no}`}
-        breadcrumbs={[{ label: "Dashboard" }, { label: "JobOrders" }]}
+        label={`Job Order Detail - ${pageData?.order_no}`}
+        breadcrumbs={[{ label: "Dashboard" }, { label: "Job Orders" }]}
         actions={[
-          { label: "Edit JobOrder", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/" + id + "/edit") },
-          { label: "List JobOrders", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders") }
+          { label: "Edit Job Order", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/" + id + "/edit") },
+          { label: "List Job Orders", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders") }
         ]}
         className="px-4"
       />
@@ -76,10 +76,10 @@ const JobOrderDetailPage: React.FC = () => {
                               {index + 1}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                              {item.product.name} #{item.product.code}
+                              {item?.product?.name} #{item?.product?.code}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                              {item.product.name} #{item.quantity}
+                              {item.quantity}
                             </td>
                           </tr>
                         ))}

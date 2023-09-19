@@ -51,6 +51,7 @@ import RequisitionFormPage from '@pages/secure/master/requisition/requisitionFor
 import RequisitionDetailPage from '@pages/secure/master/requisition/requisitionDetailPage';
 import OutwardRequestFormPage from '@pages/secure/master/outwardrequests/outwardFormPage';
 import OutwardRequestListPage from '@pages/secure/master/outwardrequests/outwardListPage';
+import OutwardRequestDetailPage from '@pages/secure/master/outwardrequests/outwardDetailPage';
 
 
 const router = createBrowserRouter([
@@ -304,7 +305,7 @@ const router = createBrowserRouter([
                   },
                   {
                     path: ":id",
-                    element: <RequisitionDetailPage />
+                    element: <OutwardRequestDetailPage />
                   },
                   {
                     path: ":id/edit",

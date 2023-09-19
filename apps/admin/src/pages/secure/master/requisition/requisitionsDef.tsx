@@ -18,19 +18,19 @@ export const requisitionColumns: ColumnDef<any, any>[] = [
     enableSorting: true,
     header: "Requisition No.",
   },
-  {
-    accessorKey: "store",
-    enableSorting: true,
-    header: "Store",
-    cell: (row: any) => {
-      return (
-        <>
-          <div>{row?.getValue()?.name?.toUpperCase()}</div>
-          <div className="font-light">({row?.getValue()?.code?.toUpperCase()})</div>
-        </>
-      );
-    },
-  },
+  // {
+  //   accessorKey: "store",
+  //   enableSorting: true,
+  //   header: "Store",
+  //   cell: (row: any) => {
+  //     return (
+  //       <>
+  //         <div>{row?.getValue()?.name?.toUpperCase()}</div>
+  //         <div className="font-light">({row?.getValue()?.code?.toUpperCase()})</div>
+  //       </>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "department",
     enableSorting: true,

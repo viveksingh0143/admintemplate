@@ -38,8 +38,15 @@ const StockinRawMaterialPage: React.FunctionComponent = () => {
       return response?.data;
     },
     () => {
-      setShowNotification('Stock updated successfully', 'success');
-      resetForm()
+      setShowNotification('Stock updated successfully', 'success')
+        .then(() => {
+          setTimeout(() => {
+            resetForm((data: any) => ({
+              ...data,
+              quantity: 0
+            }))
+          }, 900)
+        })
     },
     (errors: { rootError: any; store_id: any; product_id: any; quantity: any; pallet: any; }) => {
       const { rootError, store_id, product_id, quantity, pallet } = errors;

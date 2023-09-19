@@ -8,16 +8,16 @@ import { API_URLS } from "@configs/constants/apiUrls";
 const RequisitionDetailPage: React.FC = () => {
   const navigate = useNavigate();
   let { id } = useParams();
-  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.MASTER.JOB_ORDER_API}/${id}`);
+  const { data: pageData, isLoading, error } = useAxiosQuery(`${API_URLS.MASTER.REQUISITION_API}/${id}`);
 
   return (
     <>
       <PageHeader
-        label={`JobOrder Detail - ${pageData?.order_no}`}
-        breadcrumbs={[{ label: "Dashboard" }, { label: "JobOrders" }]}
+        label={`Requisition Detail - ${pageData?.order_no}`}
+        breadcrumbs={[{ label: "Dashboard" }, { label: "Requisitions" }]}
         actions={[
-          { label: "Edit JobOrder", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders/" + id + "/edit") },
-          { label: "List JobOrders", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/joborders") }
+          { label: "Edit Requisition", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/requisitions/" + id + "/edit") },
+          { label: "List Requisitions", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/requisitions") }
         ]}
         className="px-4"
       />
@@ -33,20 +33,17 @@ const RequisitionDetailPage: React.FC = () => {
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.issued_date }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">PO Category</dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.po_category }</dd>
+              <dt className="text-sm font-medium text-gray-900">Department</dt>
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{ pageData?.department }</dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Customer Information</dt>
+              <dt className="text-sm font-medium text-gray-900">Store Information</dt>
               <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                 <div className="sm:grid sm:grid-cols-10 sm:gap-4">
                   <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2  font-semibold">Name</div>
-                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.customer?.name}</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.store?.name}</div>
                   <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2  font-semibold">Code</div>
-                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.customer?.code}</div>
-
-                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2  font-semibold">Contact Person</div>
-                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.customer?.contact_person}</div>
+                  <div className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-3">{pageData?.store?.code}</div>
                 </div>
               </dd>
             </div>
@@ -76,10 +73,10 @@ const RequisitionDetailPage: React.FC = () => {
                               {index + 1}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                              {item.product.name} #{item.product.code}
+                              {item.product.name}<br />#{item.product.code}
                             </td>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                              {item.product.name} #{item.quantity}
+                              {item.quantity}
                             </td>
                           </tr>
                         ))}
