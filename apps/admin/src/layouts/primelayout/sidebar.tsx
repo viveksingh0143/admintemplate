@@ -8,7 +8,7 @@ import HasPermission from '@components/ui/hasPermission';
 
 const topSidebarNavs = [
   // { name: 'Dashboard', href: '/secure/dashboard', icon: HomeIcon },
-  { name: 'Products', href: '/secure/master/products', icon: FolderIcon, permission: { name: "READ", module: "PRODUCT" } },
+  { name: 'Master Products', href: '/secure/master/products', icon: FolderIcon, permission: { name: "READ", module: "PRODUCT" } },
   { name: 'Containers', href: '/secure/master/containers', icon: DocumentDuplicateIcon, permission: { name: "READ", module: "CONTAINER" } },
   { name: 'RM Approvals', href: '/secure/master/raw-material-approvals', icon: FingerPrintIcon, permission: { name: "READ", module: "RM APPROVAL" } },
   { name: 'Stores', href: '/secure/master/stores', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "STORE" } },

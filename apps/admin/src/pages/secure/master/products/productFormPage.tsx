@@ -115,7 +115,7 @@ const ProductFormPage: React.FunctionComponent = () => {
 
   return (
     <>
-      <PageHeader label={`${isEditMode ? "Update" : "Create"} Product`}
+      <PageHeader label={`${isEditMode ? "Update" : "Create"} Master Product`}
         breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }, { label: `${isEditMode ? "Update" : "Create"} Product` }]}
         actions={[
           { label: "List Products", variant: "secondary", onClick: () => navigate("/secure/master/products") }

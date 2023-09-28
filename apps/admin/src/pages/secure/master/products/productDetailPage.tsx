@@ -1,9 +1,7 @@
 import PageHeader from "@components/ui/pageHeader";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProductDetail } from "@hooks/products/productsHooks";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import { Chip } from "@components/ui";
-import { format } from "date-fns";
 import { useAxiosQuery } from "@hooks/common/useCommonAxiosActions";
 import { API_URLS } from "@configs/constants/apiUrls";
 
@@ -15,7 +13,7 @@ const ProductDetailPage: React.FC = () => {
   return (
     <>
       <PageHeader
-        label={`Product Detail - ${pageData?.name}`}
+        label={`Master Product Detail - ${pageData?.name}`}
         breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
         actions={[
           { label: "Edit Product", variant: "info", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products/" + id + "/edit") },

@@ -90,7 +90,7 @@ const ProductListPage: React.FC = () => {
   return (
     <>
       <PageHeader
-        label="Products"
+        label="Master Products"
         breadcrumbs={[{ label: "Dashboard" }, { label: "Products" }]}
         actions={[{ label: "Create Product", variant: "primary", className: "text-xs px-3 py-0", onClick: () => navigate("/secure/master/products/create") }]}
         className="px-4"
