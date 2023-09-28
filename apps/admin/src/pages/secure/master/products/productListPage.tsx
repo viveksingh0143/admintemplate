@@ -15,7 +15,7 @@ import AxiosService from "@services/axiosService";
 import { ButtonProps } from "@components/ui/button";
 
 const ProductListPage: React.FC = () => {
-  const tabs: TabType[] = CommonConstant.PRODUCT.TYPES.map((pType: string) => ({ name: pType }));
+  const tabs: TabType[] = CommonConstant.PRODUCT.RAW_MATERIAL_SUBTYPES.concat(CommonConstant.PRODUCT.FINISHED_GOODS_SUBTYPES).map((pType: string) => ({ name: pType }));
   const { setShowNotification } = useNotification();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(tabs[0]);
@@ -23,7 +23,7 @@ const ProductListPage: React.FC = () => {
   const [sortingOrder, setSortingOrder] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(CommonConstant.PAGE_INFO.PAGE_SIZE);
-  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, pageNumber, rowsPerPage, sortingOrder, { product_type: currentTab.name });
+  const { data: pageData, isLoading, error } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, pageNumber, rowsPerPage, sortingOrder, { product_subtype: currentTab.name });
 
   const isRowsSelected = rowSelection.length;
 

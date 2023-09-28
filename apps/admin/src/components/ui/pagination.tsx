@@ -1,5 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import React from 'react';
+import Button from './button';
+import { Select } from '@components/form';
+import SelectBasic from '@components/form/selectBasic';
 
 interface PaginationProps {
   rowsPerPage: number;
@@ -7,9 +10,18 @@ interface PaginationProps {
   totalPages: number;
   itemsCount: number | undefined;
   onPageChange: (page: number) => void;
+  onRowsSizeChange: (rowSize: number) => void;
+  exportCSV: () => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({ rowsPerPage, currentPage, totalPages, itemsCount = 0, onPageChange }) => {
+const Pagination: React.FC<PaginationProps> = ({ rowsPerPage, currentPage, totalPages, itemsCount = 0, onPageChange, onRowsSizeChange, exportCSV }) => {
+  const updateRowsSize = (val: string | number) => {
+    const numericVal = typeof val === 'string' ? parseFloat(val) : val;
+    if (!isNaN(numericVal)) {
+      onRowsSizeChange(numericVal);
+    }
+  };
+  
   const renderPageNumbers = () => {
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {
@@ -59,6 +71,15 @@ const Pagination: React.FC<PaginationProps> = ({ rowsPerPage, currentPage, total
         </a>
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+        <div>
+          <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+            <Button className='text-xs' variant="info" label='EXPORT AS CSV' onClick={() => exportCSV()} />
+            <div className='flex ml-2'>
+              <button type="button" className="relative bg-info -mr-px inline-flex items-center gap-x-1.5 rounded-l-md px-3 py-2 text-sm font-semibold text-white">Rows Per Page</button>
+              <SelectBasic onValueChange={updateRowsSize} selectClassName="-ml-px rounded-r-md rounded-l-none" name='pageSize' hideLabel={true} options={[10, 20, 50, 100, 200, 500]} value={rowsPerPage} />
+            </div>
+          </span>
+        </div>
         <div>
           <p className="text-sm text-gray-700">
             Page <span className="font-medium">{currentPage}</span> | 

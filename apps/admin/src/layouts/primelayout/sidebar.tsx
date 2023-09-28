@@ -1,28 +1,30 @@
 import { Fragment } from 'react'
 import { NavLink } from "react-router-dom";
 import { Dialog, Transition } from '@headlessui/react'
-import { BuildingStorefrontIcon, CalendarIcon, ChartPieIcon, ChevronDownIcon, Cog6ToothIcon, DocumentDuplicateIcon, FolderIcon, HomeIcon, MagnifyingGlassIcon, Square3Stack3DIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { BuildingStorefrontIcon, CalendarIcon, ChartPieIcon, ChevronDownIcon, Cog6ToothIcon, DocumentDuplicateIcon, FingerPrintIcon, FolderIcon, HomeIcon, MagnifyingGlassIcon, Square3Stack3DIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useThemeContext } from '@hooks/themeContext';
 import { ClassDictionary, classNames } from '@lib/utils';
+import HasPermission from '@components/ui/hasPermission';
 
 const topSidebarNavs = [
   // { name: 'Dashboard', href: '/secure/dashboard', icon: HomeIcon },
-  { name: 'Products', href: '/secure/master/products', icon: FolderIcon },
-  { name: 'Containers', href: '/secure/master/containers', icon: DocumentDuplicateIcon },
-  { name: 'Stores', href: '/secure/master/stores', icon: BuildingStorefrontIcon },
-  { name: 'Machines', href: '/secure/master/machines', icon: BuildingStorefrontIcon },
-  { name: 'Customers', href: '/secure/master/customers', icon: BuildingStorefrontIcon },
-  { name: 'Job Orders', href: '/secure/master/joborders', icon: BuildingStorefrontIcon },
+  { name: 'Products', href: '/secure/master/products', icon: FolderIcon, permission: { name: "READ", module: "PRODUCT" } },
+  { name: 'Containers', href: '/secure/master/containers', icon: DocumentDuplicateIcon, permission: { name: "READ", module: "CONTAINER" } },
+  { name: 'RM Approvals', href: '/secure/master/raw-material-approvals', icon: FingerPrintIcon, permission: { name: "READ", module: "RM APPROVAL" } },
+  { name: 'Stores', href: '/secure/master/stores', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "STORE" } },
+  { name: 'Machines', href: '/secure/master/machines', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "MACHINE" } },
+  { name: 'Customers', href: '/secure/master/customers', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "CUSTOMER" } },
+  { name: 'Job Orders', href: '/secure/master/joborders', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "JOB ORDER" } },
   
+  { name: 'Batch Labels', href: '/secure/warehouse/batchlabels', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "BATCH LABEL" } },
+  { name: 'Inventory', href: '/secure/warehouse/inventories', icon: Square3Stack3DIcon, permission: { name: "READ", module: "INVENTORY" } },
 
-  { name: 'Batch Labels', href: '/secure/warehouse/batchlabels', icon: BuildingStorefrontIcon },
-  { name: 'Inventory', href: '/secure/warehouse/inventories', icon: Square3Stack3DIcon },
+  { name: 'Requition Notes', href: '/secure/master/requisitions', icon: Square3Stack3DIcon, permission: { name: "READ", module: "REQUISITION" } },
+  { name: 'Requisition Approvals', href: '/secure/master/requisition-approvals', icon: FingerPrintIcon, permission: { name: "READ", module: "REQUISITION APPROVAL" } },
+  { name: 'Outward Requests', href: '/secure/master/outwardrequests', icon: Square3Stack3DIcon, permission: { name: "READ", module: "OUTWARD REQUEST" } },
 
-  { name: 'Requition Notes', href: '/secure/master/requisitions', icon: Square3Stack3DIcon },
-  { name: 'Outward Requests', href: '/secure/master/outwardrequests', icon: Square3Stack3DIcon },
-
-  { name: 'Users', href: '/secure/admin/users', icon: BuildingStorefrontIcon },
-  { name: 'Roles', href: '/secure/admin/roles', icon: BuildingStorefrontIcon },
+  { name: 'Users', href: '/secure/admin/users', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "USERS" } },
+  { name: 'Roles', href: '/secure/admin/roles', icon: BuildingStorefrontIcon, permission: { name: "READ", module: "ROLES" } },
   // { name: 'Calendar', href: '/secure/calendar', icon: CalendarIcon },
   // { name: 'Reports', href: '/secure/reports', icon: ChartPieIcon },
 ];
@@ -102,22 +104,24 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, updateSidebarOpen } ) =>
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
                           {topSidebarNavs.map((item) => (
-                            <li key={item.name}>
-                              <NavLink to={item.href} end
-                                className={({ isActive }) =>
-                                  classNames(
-                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
-                                    isActive ? "bg-primary-700 text-white" : "text-primary-200 hover:text-white hover:bg-primary-700",
-                                  )
-                                }>
-                                {({ isActive }) => (
-                                  <>
-                                    <item.icon className={classNames("h-6 w-6 shrink-0", isActive ? "text-white" : "text-primary-200 group-hover:text-white")} aria-hidden="true" />
-                                    <span>{item.name}</span>
-                                  </>
-                                )}
-                              </NavLink>
-                            </li>
+                            <HasPermission key={item.name} permission={item?.permission}>
+                              <li>
+                                <NavLink to={item.href} end
+                                  className={({ isActive }) =>
+                                    classNames(
+                                      "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold",
+                                      isActive ? "bg-primary-700 text-white" : "text-primary-200 hover:text-white hover:bg-primary-700",
+                                    )
+                                  }>
+                                  {({ isActive }) => (
+                                    <>
+                                      <item.icon className={classNames("h-6 w-6 shrink-0", isActive ? "text-white" : "text-primary-200 group-hover:text-white")} aria-hidden="true" />
+                                      <span>{item.name}</span>
+                                    </>
+                                  )}
+                                </NavLink>
+                              </li>
+                            </HasPermission>
                           ))}
                         </ul>
                       </li>
@@ -164,22 +168,24 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, updateSidebarOpen } ) =>
               <li>
                 <ul role="list">
                   {topSidebarNavs.map((item) => (
-                    <li key={item.name}>
-                      <NavLink to={item.href} end
-                        className={({ isActive }) =>
-                          classNames(
-                            "flex gap-2 px-4 py-3 text-gray-500 group",
-                            isActive ? "text-gray-950 bg-primary-100 font-medium hover:text-white hover:bg-primary" : "hover:text-white hover:bg-primary",
-                          )
-                        }>
-                        {({ isActive }) => (
-                          <>
-                            <item.icon className={classNames("h-6 w-6 shrink-0", isActive ? "text-primary group-hover:text-white" : "")} aria-hidden="true" />
-                            <span>{item.name}</span>
-                          </>
-                        )}
-                      </NavLink>
-                    </li>
+                    <HasPermission key={item.name} permission={item?.permission}>
+                      <li>
+                        <NavLink to={item.href} end
+                          className={({ isActive }) =>
+                            classNames(
+                              "flex gap-2 px-4 py-3 text-gray-500 group",
+                              isActive ? "text-gray-950 bg-primary-100 font-medium hover:text-white hover:bg-primary" : "hover:text-white hover:bg-primary",
+                            )
+                          }>
+                          {({ isActive }) => (
+                            <>
+                              <item.icon className={classNames("h-6 w-6 shrink-0", isActive ? "text-primary group-hover:text-white" : "")} aria-hidden="true" />
+                              <span>{item.name}</span>
+                            </>
+                          )}
+                        </NavLink>
+                      </li>
+                    </HasPermission>
                   ))}
                 </ul>
               </li>

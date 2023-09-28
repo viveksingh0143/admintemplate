@@ -1,3 +1,5 @@
+const PACKING_MATERIAL = "Packing Material";
+
 const RAW_MATERIAL = "RAW Material";
 const FINISHED_GOODS = "Finished Goods";
 // const SEMI_FINISHED_GOODS = "Semi Finished Goods";
@@ -19,7 +21,7 @@ export const CommonConstant = {
     MY_TOKENS_KEY: "mytkns"
   },
   PAGE_INFO: {
-    PAGE_SIZE: 8
+    PAGE_SIZE: 10
   },
   WORK_SHIFTS: [
     { number: "1", start: "09:00:00 AM", end: "05:00:00 PM", time_interval: "1: 09:00 AM - 05:00 PM" },
@@ -40,11 +42,17 @@ export const CommonConstant = {
   },
   CONTAINER: {
     TYPES: <string[]>[PALLET, BIN, RACK],
+    PALLET: PALLET,
+    BIN: BIN,
+    RACK: RACK,
   },
   PRODUCT: {
     RAW_MATERIAL: RAW_MATERIAL,
     FINISHED_GOODS: FINISHED_GOODS,
+    PACKING_MATERIAL: PACKING_MATERIAL,
     TYPES: <string[]>[RAW_MATERIAL, FINISHED_GOODS],
+    RAW_MATERIAL_SUBTYPES: <string[]>[RAW_MATERIAL, PACKING_MATERIAL],
+    FINISHED_GOODS_SUBTYPES: <string[]>[FINISHED_GOODS],
   }
 } as const;
 

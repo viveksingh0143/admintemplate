@@ -2,7 +2,6 @@ import EasyForm, { useEasyForm, Checkbox, Input } from '@components/form';
 import Button from '@components/ui/button';
 import LoadingOverlay from '@components/ui/loadingOverlay';
 import { Notification, NotificationHandles } from '@components/ui/notification';
-import { useLogin } from '@hooks/auth/useLogin';
 import { useAxiosMutation } from '@hooks/common/useCommonAxiosActions';
 import { useThemeContext } from '@hooks/themeContext';
 import { loginRequesst } from '@services/authService';

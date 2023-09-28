@@ -4,6 +4,7 @@ import Pagination from "./pagination";
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/20/solid";
 import { classNames } from "@lib/utils";
 import Button from "./button";
+import { downloadCSV } from "@lib/utils/downloadFile";
 
 interface RowSelection {
   [rowId: string]: boolean;
@@ -21,11 +22,13 @@ interface BasicTableProps {
   onRowSelection?: (selectedRows: any[]) => void;
   onPageChange?: (page: number, pageSize: number, sorting: string) => void;
   onClickRow?: (cell: Cell<any, unknown>, row: Row<any>) => void;
+  exportCSV?: () => void;
 }
 
-const BasicTable: FC<BasicTableProps> = ({ data, columns, isFetching, skeletonCount = 10, skeletonHeight = 28, rowsPerPage, pageCount, itemsCount, onRowSelection, onClickRow, onPageChange }) => {
+const BasicTable: FC<BasicTableProps> = ({ data, columns, isFetching, skeletonCount = 10, skeletonHeight = 28, rowsPerPage, pageCount, itemsCount, onRowSelection, onClickRow, onPageChange, exportCSV }) => {
   const [rowSelection, setRowSelection] = useState<RowSelection>({});
   const [paginationPage, setPaginationPage] = useState(1);
+  const [rowsSize, setRowsSize] = useState(rowsPerPage);
   const [sorting, setSorting] = useState<SortingState>([]);
   
   const memoizedData = useMemo(() => data, [data]);
@@ -36,6 +39,13 @@ const BasicTable: FC<BasicTableProps> = ({ data, columns, isFetching, skeletonCo
   const skeletons = Array.from({ length: skeletonCount }, (x, i) => i);
   const columnCount = tableInstance.getAllColumns().length;
   const noDataFound = !isFetching && (!memoizedData || memoizedData.length === 0);
+  const onExportCSV = () => {
+    if (exportCSV) {
+      exportCSV();
+    } else {
+      downloadCSV(data, "export.csv");
+    }
+  };
 
   useEffect(() => {
     if (onRowSelection) {
@@ -48,9 +58,9 @@ const BasicTable: FC<BasicTableProps> = ({ data, columns, isFetching, skeletonCo
     else if (paginationPage > pageCount) setPaginationPage(pageCount);
     else setPaginationPage(paginationPage);
     const sortingOrder = sorting.map(s => `${s.id} ${s.desc ? "DESC" : "ASC"}`).join(", ");
-    onPageChange?.(paginationPage, rowsPerPage, sortingOrder);
+    onPageChange?.(paginationPage, rowsSize, sortingOrder);
 
-  }, [paginationPage, rowsPerPage, sorting]);
+  }, [paginationPage, rowsSize, sorting]);
   
   return (
     <div className="shadow-lg bg-white rounded-xl overflow-hidden">
@@ -132,7 +142,7 @@ const BasicTable: FC<BasicTableProps> = ({ data, columns, isFetching, skeletonCo
       )}
       {pageCount !== undefined && onPageChange && (
         <div className="flex justify-center items-center">
-          <Pagination rowsPerPage={rowsPerPage} currentPage={paginationPage} totalPages={pageCount} onPageChange={setPaginationPage} itemsCount={itemsCount} />
+          <Pagination rowsPerPage={rowsSize} currentPage={paginationPage} totalPages={pageCount} onPageChange={setPaginationPage} onRowsSizeChange={setRowsSize} exportCSV={onExportCSV} itemsCount={itemsCount} />
         </div>
       )}
     </div>

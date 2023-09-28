@@ -53,8 +53,8 @@ const RequisitionFormPage: React.FunctionComponent = () => {
   const items = useWatch({ control: methods.control, name: "items" });
 
   const { data: formData, isLoading: isDataLoading, error } = isEditMode ? useAxiosQuery(`${API_URLS.MASTER.REQUISITION_API}/${id}`) : {data: null, isLoading: false, error: null};
-  const { data: stores, isLoading: isStoresLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 2000, "name asc", {});
-  const { data: products, isLoading: isProductsLoading, error: productError } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, 1, 2000, "name asc", { product_types: selectedStore?.store_types }, selectedStore !== undefined);
+  const { data: stores, isLoading: isStoresLoading, error: storeError } = useAxiosQueryWithParams(API_URLS.MASTER.STORE_API, 1, 2000, "name asc", { store_type: "RAW Material" });
+  const { data: products, isLoading: isProductsLoading, error: productError } = useAxiosQueryWithParams(API_URLS.MASTER.PRODUCT_API, 1, 2000, "name asc", { product_types: "RAW Material" }, selectedStore !== undefined);
 
   const notificationRef = useRef<NotificationHandles>(null);
   

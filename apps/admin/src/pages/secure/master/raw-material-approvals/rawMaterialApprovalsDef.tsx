@@ -42,6 +42,19 @@ export const containerColumns: ColumnDef<any, any>[] = [
     },
   },
   {
+    accessorKey: "approved",
+    enableSorting: true,
+    header: "Is Approved",
+    cell: (row: any) => {
+      return (
+        <Chip
+          className="text-xs py-1 px-2"
+          label={row?.getValue() ? 'YES' : 'NO'}
+          variant={row.getValue() ? "success" : "warning"} />
+      );
+    }
+  },
+  {
     accessorKey: "status",
     enableSorting: true,
     header: "Status",

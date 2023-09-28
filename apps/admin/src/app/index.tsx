@@ -52,6 +52,10 @@ import RequisitionDetailPage from '@pages/secure/master/requisition/requisitionD
 import OutwardRequestFormPage from '@pages/secure/master/outwardrequests/outwardFormPage';
 import OutwardRequestListPage from '@pages/secure/master/outwardrequests/outwardListPage';
 import OutwardRequestDetailPage from '@pages/secure/master/outwardrequests/outwardDetailPage';
+import RawMaterialApprovalListPage from '@pages/secure/master/raw-material-approvals/rawMaterialApprovalListPage';
+import RequisitionApprovalListPage from '@pages/secure/master/requisition-approvals/requisitionApprovalListPage';
+import LogoutPage from '@pages/auth/logoutPage';
+import ProtectedRoutes from '@components/ui/protectedRoutes';
 
 
 const router = createBrowserRouter([
@@ -66,6 +70,10 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <LoginPage />,
+      },
+      {
+        path: 'logout',
+        element: <LogoutPage />,
       },
       {
         path: 'register',
@@ -86,7 +94,7 @@ const router = createBrowserRouter([
         element: <Navigate to='/secure/dashboard' />,
       },
       {
-        path: "secure",children: [
+        path: "secure", children: [
           {
             index: true,
             element: <Navigate to='/secure/dashboard' />,
@@ -230,6 +238,15 @@ const router = createBrowserRouter([
                 ]
               },
               {
+                path: "raw-material-approvals",
+                children: [
+                  {
+                    index: true,
+                    element: <RawMaterialApprovalListPage />,
+                  }
+                ]
+              },
+              {
                 path: "customers",
                 children: [
                   {
@@ -289,6 +306,15 @@ const router = createBrowserRouter([
                   {
                     path: ":id/edit",
                     element: <RequisitionFormPage />
+                  }
+                ]
+              },
+              {
+                path: "requisition-approvals",
+                children: [
+                  {
+                    index: true,
+                    element: <RequisitionApprovalListPage />,
                   }
                 ]
               },

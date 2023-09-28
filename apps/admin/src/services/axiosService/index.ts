@@ -73,6 +73,13 @@ class AxiosService {
     }
   }
 
+  public clearAccessToken() {
+    localStorage.setItem(CommonConstant.LOCAL_STORAGE.MY_TOKENS_KEY, encryptData({}, EncryptionConstant.secret));
+    if (AxiosService.instance) {
+      delete AxiosService.instance.axiosInstance.defaults.headers.common['Authorization'];
+    }
+  }
+
   public getUrlWithParams(url: string, params: any) {
     let queryString = this.getQueryString(params);
     if (queryString === "") {

@@ -9,13 +9,14 @@ import { BarsArrowUpIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { useAxiosMutation, useAxiosQuery } from '@hooks/common/useCommonAxiosActions';
 import { useNotification } from '@hooks/notificationContext';
 import AxiosService from '@services/axiosService';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useWatch } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 
 const productSchema = z.object({
   product_type: z.string().nonempty("product type is required"),
+  product_subtype: z.string().nonempty("product subtype is required"),
   code: z.string().nonempty("Code is required"),
   link_code: z.string(),
   name: z.string().nonempty("Name is required"),
@@ -29,6 +30,7 @@ const productSchema = z.object({
 const ProductFormPage: React.FunctionComponent = () => {
   const { setShowNotification } = useNotification();
   const navigate = useNavigate();
+  const [subTypes, setSubTypes] = useState(CommonConstant.PRODUCT.RAW_MATERIAL_SUBTYPES);
 
   const { id } = useParams();
   const isEditMode = Boolean(id);
@@ -37,6 +39,7 @@ const ProductFormPage: React.FunctionComponent = () => {
   const methods = useEasyForm(productSchema);
   const { reset: resetForm, setValue, setError, formState: { errors, isLoading, isSubmitting } } = methods;
   const unitType = useWatch({ control: methods.control, name: "unit_type" });
+  const productType = useWatch({ control: methods.control, name: "product_type" });
   const notificationRef = useRef<NotificationHandles>(null);
 
   const mutation = useAxiosMutation(
@@ -79,6 +82,7 @@ const ProductFormPage: React.FunctionComponent = () => {
   const resetFormHandler = () => {
     const defaultValues = {
       product_type: "RAW Material",
+      product_subtype: "RAW Material",
       code: "",
       link_code: "",
       name: "",
@@ -99,6 +103,16 @@ const ProductFormPage: React.FunctionComponent = () => {
     resetFormHandler();
   }, [formData, isEditMode]);
 
+  useEffect(() => {
+    if (productType === CommonConstant.PRODUCT.RAW_MATERIAL) {
+      setSubTypes(CommonConstant.PRODUCT.RAW_MATERIAL_SUBTYPES)
+      // setValue('product_subtype', CommonConstant.PRODUCT.RAW_MATERIAL_SUBTYPES[0])
+    } else {
+      setSubTypes(CommonConstant.PRODUCT.FINISHED_GOODS_SUBTYPES)
+      // setValue('product_subtype', CommonConstant.PRODUCT.FINISHED_GOODS_SUBTYPES[0])
+    }
+  }, [productType])
+
   return (
     <>
       <PageHeader label={`${isEditMode ? "Update" : "Create"} Product`}
@@ -115,6 +129,7 @@ const ProductFormPage: React.FunctionComponent = () => {
           <div className="border-b border-gray-900/10 pb-12">
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-0 sm:grid-cols-3">
               <Select name="product_type" label="Product Type" placeholder="Please enter type" options={CommonConstant.PRODUCT.TYPES} className='sm:col-span-1' selectClassName="rounded-lg" />
+              <Select name="product_subtype" label="Product Sub-Type" placeholder="Please enter sub-type" options={subTypes} className='sm:col-span-1' selectClassName="rounded-lg" />
               <Input name="code" label="Code" placeholder="Please enter code" className='sm:col-span-1' />
               <Input name="name" label="Name" placeholder="Please enter name" className='sm:col-span-1' />
               <Select name="unit_type" label="Unit Type" placeholder="Please enter unit type" options={CommonConstant.UNIT.COMMON} className='sm:col-span-1' />

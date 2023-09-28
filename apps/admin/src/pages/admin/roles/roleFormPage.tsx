@@ -13,6 +13,8 @@ import { API_URLS } from '@configs/constants/apiUrls';
 import AxiosService from '@services/axiosService';
 import ErrorSummary from '@components/ui/errorSummary';
 
+type PermTypes = "read_perm" | "create_perm" | "update_perm" | "delete_perm" | "import_perm" | "export_perm";
+
 const permissionSchema = z.object({
   module_name: z.string(),
   read_perm: z.boolean(),
@@ -30,15 +32,23 @@ const roleSchema = z.object({
 });
 
 const permissionsGrid = [
-  { module_name: "USERS", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "ROLES", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "PRODUCT", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "BATCH LABEL", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "STORE", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "RM STOCKIN", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "FD STOCKING", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "RM STOCK OUT", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true },
-  { module_name: "FD STOCK OUT", read_perm: false, create_perm: true, update_perm: true, delete_perm: true, import_perm: true, export_perm: true }
+  { module_name: "USERS", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "ROLES", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "PRODUCT", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "MACHINE", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "CUSTOMER", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "STORE", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "INVENTORY", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "RM APPROVAL", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "RM STOCKIN", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "FD STOCKING", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "RM STOCK OUT", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "FD STOCK OUT", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "JOB ORDER", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "BATCH LABEL", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "REQUISITION", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "REQUISITION APPROVAL", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
+  { module_name: "OUTWARD REQUEST", read_perm: false, create_perm: false, update_perm: false, delete_perm: false, import_perm: false, export_perm: false },
 ];
 
 const RoleFormPage: React.FunctionComponent = () => {
@@ -50,7 +60,7 @@ const RoleFormPage: React.FunctionComponent = () => {
   const { data: formData, isLoading: isDataLoading, error } = isEditMode ? useAxiosQuery(`${API_URLS.ROLE_API}/${id}`) : {data: null, isLoading: false, error: null};
   
   const methods = useEasyForm(roleSchema);
-  const { reset: resetForm, setError, formState: { errors, isLoading, isSubmitting } } = methods;
+  const { reset: resetForm, setValue, setError, formState: { errors, isLoading, isSubmitting } } = methods;
   const notificationRef = useRef<NotificationHandles>(null);
 
   const mutation = useAxiosMutation(
@@ -89,7 +99,12 @@ const RoleFormPage: React.FunctionComponent = () => {
       permissions: permissionsGrid
     };
     if (isEditMode && formData) {
-      resetForm({ ...defaultValues, ...formData });
+      const tempFormData = { ...defaultValues, ...formData }
+      tempFormData.permissions = defaultValues.permissions.map(gridItem => {
+        const foundItem = tempFormData.permissions.find((item: any) => item.module_name === gridItem.module_name);
+        return foundItem || gridItem;
+      });
+      resetForm(tempFormData);
     } else {
       resetForm(defaultValues);
     }
@@ -98,6 +113,14 @@ const RoleFormPage: React.FunctionComponent = () => {
   useEffect(() => {
     resetFormHandler();
   }, [formData, isEditMode]);
+
+  const toggleAllPermission = (event: any, permType: PermTypes) => {
+    const value = event.target.checked;
+    permissionsGrid.forEach((_, index) => {
+      const fieldName = `permissions[${index}].${permType}` as const;
+      setValue(fieldName, value)
+    })
+  }
 
   return (
     <>
@@ -122,27 +145,13 @@ const RoleFormPage: React.FunctionComponent = () => {
               <table className="min-w-full divide-y divide-gray-300">
                 <thead>
                   <tr>
-                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">
-                      Module Name
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Read
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Create
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Update
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Delete
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Import
-                    </th>
-                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                      Export
-                    </th>
+                    <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Module Name</th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Read  <input onChange={(e) => toggleAllPermission(e, 'read_perm')} type="checkbox" className="ml-3 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" /></th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Create  <input onChange={(e) => toggleAllPermission(e, 'create_perm')} type="checkbox" className="ml-3 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" /></th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Update  <input onChange={(e) => toggleAllPermission(e, 'update_perm')} type="checkbox" className="ml-3 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" /></th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Delete  <input onChange={(e) => toggleAllPermission(e, 'delete_perm')} type="checkbox" className="ml-3 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" /></th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Import  <input onChange={(e) => toggleAllPermission(e, 'import_perm')} type="checkbox" className="ml-3 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" /></th>
+                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Export  <input onChange={(e) => toggleAllPermission(e, 'export_perm')} type="checkbox" className="ml-3 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" /></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">

@@ -28,8 +28,7 @@ const joborderSchema = z.object({
   }),
   items: z.array(z.object({
     product: z.object({
-      id: z.union([z.number(), z.string().transform(Number)]),
-      name: z.string()
+      id: z.union([z.number(), z.string().transform(Number)])
     }),
     quantity: z.number()
   })),
@@ -116,20 +115,7 @@ const JobOrderFormPage: React.FunctionComponent = () => {
     resetFormHandler();
   }, [formData, isEditMode, customers, products]);
 
-  const items = useWatch({ control: methods.control, name: "items" });
-
-  useEffect(() => {
-    if (items) {
-      items.forEach((item, index) => {
-        const product = products?.data.find((tempProduct: { id: number; }) => tempProduct.id == item?.product?.id);
-        if (product) {
-          setValue(`items.${index}.product.name`, product.name)
-        }
-      })
-    }
-  }, [products]);
-
-
+  // const items = useWatch({ control: methods.control, name: "items" });
   return (
     <>
       <PageHeader label={`${isEditMode ? "Update" : "Create"} Job Order`}

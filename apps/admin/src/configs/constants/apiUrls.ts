@@ -9,8 +9,10 @@ export const API_URLS = {
     CUSTOMER_API: "/master/customers",
     STORE_API: "/master/stores",
     CONTAINER_API: "/master/containers",
+    PALLET_NEED_APPROVALS_API: "/master/containers/need-approvals",
     JOB_ORDER_API: "/master/joborders",
     REQUISITION_API: "/master/requisitions",
+    REQUISITION_NEED_APPROVALS_API: "/master/requisitions/need-approvals",
     OUTWARD_REQUEST_API: "/master/outwardrequests",
     
   },

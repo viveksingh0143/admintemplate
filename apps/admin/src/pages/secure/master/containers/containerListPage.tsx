@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import BasicTable from "@components/ui/basicTable";
 import { CommonConstant } from "@configs/constants/common";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@components/ui";
+import { Button, Chip } from "@components/ui";
 import { EyeIcon, PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { ButtonProps } from "@components/ui/button";
 import { containerColumns } from "./containersDef";
@@ -13,10 +13,26 @@ import { useAxiosMutation, useAxiosQueryWithParams } from "@hooks/common/useComm
 import { API_URLS } from "@configs/constants/apiUrls";
 import AxiosService from "@services/axiosService";
 import TabGroup, { TabType } from "@components/ui/tabs";
+import { PrinterIcon } from "@heroicons/react/24/outline";
 
 const tabs: TabType[] = CommonConstant.CONTAINER.TYPES.map(t => ({ name: t }));
+const isApprovedDef = { accessorKey: "approved", enableSorting: true, header: "Is Approved", cell: (row: any) => { return ( <Chip className="text-xs py-1 px-2" label={row?.getValue() ? 'YES' : 'NO'} variant={row.getValue() ? "success" : "warning"} /> ); }};
 
 const ContainerListPage: React.FC = () => {
+  const actionsColumn: ColumnDef<any> = {
+    accessorKey: "actions",
+    enableSorting: false,
+    header: "Actions",
+    cell: ({ row }) => (
+      <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+        <Button variant="info" icon={<PrinterIcon className="h-4 w-3 rounded-full" />} />
+        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/containers/${row.original.id}`)} />
+        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/containers/${row.original.id}/edit`)} />
+        <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => deleteSelected(row.original)} />
+      </span>
+    ),
+  };
+  const [visibleContainerColumns, setVisibleContainerColumns] = useState([...containerColumns, isApprovedDef, actionsColumn]);
   const { setShowNotification } = useNotification();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(tabs[0]);
@@ -56,25 +72,18 @@ const ContainerListPage: React.FC = () => {
   };
 
   const handleTabClick = (selectedTab: TabType) => {
+    if (selectedTab.name === 'PALLET') {
+      setVisibleContainerColumns([...containerColumns, isApprovedDef, actionsColumn]);
+    } else {
+      setVisibleContainerColumns([...containerColumns, actionsColumn]);
+    }
     setCurrentTab(selectedTab);
-  };
-
-  const actionsColumn: ColumnDef<any> = {
-    accessorKey: "actions",
-    enableSorting: false,
-    header: "Actions",
-    cell: ({ row }) => (
-      <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
-        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/containers/${row.original.id}`)} />
-        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/master/containers/${row.original.id}/edit`)} />
-        <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => deleteSelected(row.original)} />
-      </span>
-    ),
   };
 
   const memoizedActionsOnSelection = useMemo<ButtonProps[]>(() => {
     if (rowSelection.length > 0) {
       return [
+        { label: "Print All", variant: "info", className: "text-xs px-3 py-0", onClick: () => {} },
         { label: "Delete All", variant: "danger", className: "text-xs px-3 py-0", onClick: () => deleteAllSelected(rowSelection) }
       ];
     } else {
@@ -104,7 +113,7 @@ const ContainerListPage: React.FC = () => {
       <div className="p-4 shadow-xl rounded-lg">
         <BasicTable
           data={pageData ? pageData.data : []}
-          columns={[...containerColumns, actionsColumn]}
+          columns={visibleContainerColumns}
           isFetching={isLoading}
           skeletonCount={5}
           rowsPerPage={rowsPerPage}

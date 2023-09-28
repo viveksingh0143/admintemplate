@@ -5,9 +5,16 @@ export type ColorTheme = keyof typeof ColorThemes;
 // export type ColorTheme = "Root" | "Classic Corporate" | "Tropical Sunset" | "Gentle Breeze" | "Forest Green";
 export type LayoutTheme = 'stacked' | 'sidebar';
 
+export type PermissionType = {
+    module: string;
+    name: string
+}
+
+
 export interface SessionUser {
     name: string;
     staff_id: string;
+    permissions: PermissionType[];
 }
 
 export type Theme = {

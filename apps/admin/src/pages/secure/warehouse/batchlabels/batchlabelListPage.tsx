@@ -67,12 +67,21 @@ const BatchListPage: React.FC = () => {
     enableSorting: false,
     header: "Actions",
     cell: ({ row }) => (
-      <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
-        <Button variant="info" icon={<PrinterIcon className="h-4 w-3 rounded-full" />} onClick={() => printStickers(row.original)} />
-        <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/batchlabels/${row.original.id}`)} />
-        <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/batchlabels/${row.original.id}/edit`)} />
-        <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => deleteSelected(row.original)} />
-      </span>
+      <>
+        <div>
+          <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+            <Button variant="info" icon={<PrinterIcon className="h-4 w-3 rounded-full" />} onClick={() => printStickers(row.original)} />
+            <Button variant="primary" icon={<EyeIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/batchlabels/${row.original.id}`)} />
+            <Button variant="warning" icon={<PencilIcon className="h-4 w-3 rounded-full" />} onClick={() => navigate(`/secure/warehouse/batchlabels/${row.original.id}/edit`)} />
+            <Button variant="danger" icon={<TrashIcon className="h-4 w-3 rounded-full" />} onClick={() => deleteSelected(row.original)} />
+          </span>
+        </div>
+        <div className="mt-1">
+          <span className="isolate inline-flex rounded-md shadow-sm text-xs gap-1">
+            <Button className="text-xs" variant="info" label="Zero Print" icon={<PrinterIcon className="h-4 w-3 rounded-full inline-flex mr-1" />} onClick={() => setShowNotification('Your zero sticker printed successfully', 'success')} />
+          </span>
+        </div>
+      </>
     ),
   };
 

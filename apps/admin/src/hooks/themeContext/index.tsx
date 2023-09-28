@@ -9,7 +9,7 @@ const ThemeContext = createContext<ThemeContextProps | null>(null);
 export default function ThemeContextProvider({ children }: ThemeContextProviderProps) {
     const [theme, setTheme] = useLocalStorageState<Theme>("pref-theme", { colorTheme: "Default", hasColorBg: false });
     const [layout, setLayout] = useLocalStorageState<LayoutTheme>("pref-layout", "sidebar");
-    const [sessionUser, setSessionUser] = useLocalStorageState<SessionUser>("minfo", { name: "", staff_id: "" }, EncryptionConstant.secret);
+    const [sessionUser, setSessionUser] = useLocalStorageState<SessionUser>("minfo", { name: "", staff_id: "", permissions: [] }, EncryptionConstant.secret);
     
     useEffect(() => {
         const allThemeKeys = Object.values(ColorThemes).map(theme => theme.key).filter(key => key !== "");

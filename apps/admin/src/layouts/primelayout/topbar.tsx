@@ -7,7 +7,7 @@ import { classNames } from '@lib/utils';
 import { UserCircleIcon } from '@heroicons/react/20/solid';
 
 const userNavigation = [
-  { name: 'Your profile', href: '/my-profile' },
+  // { name: 'Your profile', href: '/my-profile' },
   { name: 'Sign out', href: '/auth/logout' },
 ];
 
